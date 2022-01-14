@@ -21,7 +21,7 @@ public class GuestbookController extends HttpServlet {
 		String actionName = request.getParameter("a");
 
 		ActionFactory af = new GuestbookActionFactory();
-		Action action = new MainActionFactory().getAction(actionName);
+		Action action = af.getAction(actionName);
 		action.execute(request, response);
 	}
 
