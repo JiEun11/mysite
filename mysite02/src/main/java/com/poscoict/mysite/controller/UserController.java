@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.poscoict.mysite.mvc.main.MainActionFactory;
+import com.poscoict.mysite.mvc.user.UserActionFactory;
 import com.poscoict.web.mvc.Action;
 import com.poscoict.web.mvc.ActionFactory;
 
@@ -19,8 +20,8 @@ public class UserController extends HttpServlet {
 		
 		String actionName = request.getParameter("a");
 		
-		ActionFactory af = new MainActionFactory();
-		Action action = new MainActionFactory().getAction(actionName);
+		ActionFactory af = new UserActionFactory();
+		Action action = af.getAction(actionName);
 		action.execute(request, response);
 	}
 
