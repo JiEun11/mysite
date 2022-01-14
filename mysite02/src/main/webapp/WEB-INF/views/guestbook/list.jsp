@@ -15,15 +15,15 @@
 		<jsp:include page="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="guestbook">
-				<form action="/guestbook" method="post">
+				<form action="<%=request.getContextPath() %>/guestbook" method="post">
 					<input type="hidden" name="a" value="insert">
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>
-							<td>비밀번호</td><td><input type="password" name="pass"></td>
+							<td>비밀번호</td><td><input type="password" name="password"></td>
 						</tr>
 						<tr>
-							<td colspan=4><textarea name="content" id="content"></textarea></td>
+							<td colspan=4><textarea name="message" id="content"></textarea></td>
 						</tr>
 						<tr>
 							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
@@ -44,11 +44,11 @@
 								<td>[<%=count-index++ %>]</td>
 								<td><%=gbvo.getName()  %></td>
 								<td><%=gbvo.getRegDate() %></td>
-								<td><a href="<%=request.getContextPath() %>/guestbook?a=delete">삭제</a></td>
+								<td><a href="<%=request.getContextPath() %>/guestbook?a=delete&no=<%= gbvo.getNo()%>">삭제</a></td>
 							</tr>
 							<tr>
 								<td colspan=4>
-								<%=gbvo.getMessage() %>	
+								<%=gbvo.getMessage().replace("\n", "<br>") %>	
 								</td>
 							</tr>
 						</table>
