@@ -28,6 +28,7 @@ public class UpdateFormAction implements Action {
 		}
 		
 		UserVo vo = new UserDao().findByNo(authUser.getNo());
+		// findByNo : no를 통해 name, email, password, gender를 가져오는 메소드
 //		System.out.println(vo);
 		request.setAttribute("userVo", vo);
 		MvcUtil.forward("user/updateform", request, response);

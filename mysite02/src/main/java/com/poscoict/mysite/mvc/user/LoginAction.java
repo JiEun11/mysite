@@ -20,7 +20,9 @@ public class LoginAction implements Action {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		UserVo authUser = new UserDao().findByEmailAndPassword(email, password); // return null 이면 login failed
+		UserVo authUser = new UserDao().findByEmailAndPassword(email, password); 
+		// findByEamilAndPassword : email, password를 통해 no, name 가져오는 메소드 
+		// return null 이면 login failed
 		
 		if(authUser == null) {
 			/* 이메일 또는 비밀번호가 틀림 */
