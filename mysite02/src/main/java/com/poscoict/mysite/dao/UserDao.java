@@ -10,6 +10,27 @@ import com.poscoict.mysite.vo.UserVo;
 
 public class UserDao {
 	
+	/*
+	 * driver loading 
+	 */
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+		try {
+			//1. JDBC 드라이버 로딩
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			//2. 연결하기
+			String url = "jdbc:mysql://localhost:3306/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			
+		} catch (ClassNotFoundException e) {
+			System.out.println("Fail to load a driver.: " + e);
+		}
+		
+		return conn;
+	}
+	
+	
 	public boolean insert(UserVo vo) {
 		boolean result = false;
 		Connection conn = null;
@@ -104,24 +125,58 @@ public class UserDao {
 		
 		return result;
 	}
-	
-	/*
-	 * driver loading 
-	 */
-	private Connection getConnection() throws SQLException {
+
+
+	public UserVo findByNo(Long no) {
+		UserVo result = null;
+		
 		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
 		try {
-			//1. JDBC 드라이버 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = getConnection();
 			
-			//2. 연결하기
-			String url = "jdbc:mysql://localhost:3306/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			//3. SQL준비
+			String sql = "select name,email,password from user where no=?";
+			pstmt = conn.prepareStatement(sql);
 			
-		} catch (ClassNotFoundException e) {
-			System.out.println("Fail to load a driver.: " + e);
+			//4. 바인딩
+			pstmt.setLong(1, no);
+			
+			//5. SQL실행
+			rs = pstmt.executeQuery();
+			if(rs.next()) {  //여러 개가 아니라 1개 리턴되기 때문에 while이 아닌 if를 써도된다.
+				String name = rs.getString(1);
+				String email = rs.getString(2);
+				String password = rs.getString(3);
+				
+				result = new UserVo();
+				result.setName(name);
+				result.setEmail(email);
+				result.setPassword(password);
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		} finally {
+			// 자원 정리
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		return conn;
+		return result;
 	}
+		
+		
 }
