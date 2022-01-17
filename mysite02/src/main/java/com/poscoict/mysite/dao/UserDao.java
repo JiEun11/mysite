@@ -9,26 +9,6 @@ import java.sql.SQLException;
 import com.poscoict.mysite.vo.UserVo;
 
 public class UserDao {
-
-	/*
-	 * driver loading 
-	 */
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			//1. JDBC 드라이버 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			//2. 연결하기
-			String url = "jdbc:mysql://localhost:3306/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			
-		} catch (ClassNotFoundException e) {
-			System.out.println("Fail to load a driver.: " + e);
-		}
-		
-		return conn;
-	}
 	
 	public boolean insert(UserVo vo) {
 		boolean result = false;
@@ -123,5 +103,25 @@ public class UserDao {
 		}
 		
 		return result;
+	}
+	
+	/*
+	 * driver loading 
+	 */
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+		try {
+			//1. JDBC 드라이버 로딩
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			//2. 연결하기
+			String url = "jdbc:mysql://localhost:3306/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			
+		} catch (ClassNotFoundException e) {
+			System.out.println("Fail to load a driver.: " + e);
+		}
+		
+		return conn;
 	}
 }
