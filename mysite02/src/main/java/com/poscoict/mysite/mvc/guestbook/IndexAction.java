@@ -21,7 +21,7 @@ public class IndexAction implements Action {
 		GuestbookDao gdao = new GuestbookDao();
 		List<GuestbookVo> list = gdao.findAll();
 		
-		request.setAttribute("glist", list);
+		request.setAttribute("list", list);
 		MvcUtil.forward("guestbook/list", request, response);
 		
 	}
