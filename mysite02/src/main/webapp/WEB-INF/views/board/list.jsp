@@ -31,18 +31,29 @@
 					</tr>				
 					<tr>
 						<td>${count-status.index }</td>
-						<td style="text-align:left; padding-left:0px"><a href="${pageContext.request.contextPath }/board?a=view">${vo.title }</a></td>
+						<c:choose>
+							<c:when test="${1 eq vo.depth}">
+								<td style="text-align:left; padding-left:0px">
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
+							</c:when>
+							<c:otherwise>
+								<td style="text-align:left; padding-left:${20*vo.depth }px">
+								<img src="${pageContext.request.contextPath }/assets/images/reply.png" />
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
+							</c:otherwise>
+						</c:choose>
 						<td>${vo.userName }</td>
 						<td>${vo.hit }</td>
 						<td>${vo.regDate }</td>
 						<td><a href=""  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
 					</tr>
+					
 					<tr>
 						<td>2</td>
 						<!-- style="padding-left:${(vo.depth-1)*20}px" -->
 						<td style="text-align:left; padding-left: 20px;">
 							<img src="${pageContext.request.contextPath }/assets/images/reply.png" />
-							<a href="">두 번째 글입니다.</a>
+							<a href="/mysite02/b">두 번째 글입니다.</a>
 						</td>
 						
 						<td>안대혁</td>
