@@ -16,7 +16,16 @@ public class BoardActionFactory extends ActionFactory {
 			action = new WriteAction();
 		}
 		else if("view".equals(actionName)) {
-			action = new viewAction();
+			action = new ViewAction();
+		}
+		else if("modifyform".equals(actionName)) {
+			action = new ModifyFormAction();
+		}
+		else if("modify".equals(actionName)) {
+			action = new ModifyAction();
+		}
+		else if("delete".equals(actionName)) {
+			action = new DeleteAction();
 		}
 		else {		// 아무것도 안 해줬을 때 list 보여주기 
 			action = new ListAction();

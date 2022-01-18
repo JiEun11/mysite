@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.poscoict.mysite.vo.BoardVo;
-import com.poscoict.mysite.vo.GuestbookVo;
 
 public class BoardDao {
 	
@@ -130,6 +129,108 @@ public class BoardDao {
 		return result;
 	}
 	
+	/*
+	 * 상세글 보기  
+	 */
+	public BoardVo findOne(Long no) {
+		BoardVo result = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			//3. SQL준비
+			String sql = "SELECT title, contents "
+					+ "FROM board "
+					+ "WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. 바인딩
+			pstmt.setLong(1, no);
+			
+			//5. SQL실행
+			rs = pstmt.executeQuery();
+			if(rs.next()) {  //여러 개가 아니라 1개 리턴되기 때문에 while이 아닌 if를 써도된다.
+				String title = rs.getString(1);
+				String content = rs.getString(2);
+				
+				result = new BoardVo();
+				result.setNo(no);
+				result.setTitle(title);
+				result.setContents(content);
+			
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		} finally {
+			// 자원 정리
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	/*
+	 * 글 수정 눌렀을 때  
+	 */
+	public boolean updateBoard(BoardVo vo) {
+		boolean result = false;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			//3. SQL준비
+			String sql = "update board set title=?, contents=? where no=?";			
+			pstmt = conn.prepareStatement(sql);
+			
+			// 4. 바인딩(binding)
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setLong(3, vo.getNo());
+			
+			// 5. sql 실행, executeQuery는 rs, executeUpdatesms int로 반환
+			result = (pstmt.executeUpdate() == 1);
+			
+		}	catch (SQLException e) {
+			System.out.println("error: " + e);
+		} finally {
+			// 자원 정리
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 	
 	/*
 	 * driver loading 

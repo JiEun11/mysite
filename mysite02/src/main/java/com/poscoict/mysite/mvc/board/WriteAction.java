@@ -36,6 +36,10 @@ public class WriteAction implements Action {
 			BoardVo vo = new BoardVo();
 			vo.setTitle(title);
 			vo.setContents(content);
+//			vo.setHit(0); db에서 default 0
+//			vo.setGroupNo(1); dao에서 ifnull이면 1로 처리 
+			vo.setOrderNo(1);
+			vo.setDepth(1);	//default 1로 처리 
 			vo.setUserNo(authUser.getNo());
 			vo.setUserName(authUser.getName());
 			boolean result = new BoardDao().insert(vo);
