@@ -35,17 +35,19 @@ public class UpdateAction implements Action {
 			vo.setName(name);
 			vo.setNo(authUser.getNo());
 			
-			session.setAttribute("authUser", vo);
-			// session 객체 update 
-			
+			//session.setAttribute("authUser", vo);
+			// session 객체 update 할 필요가 없다.
 			vo.setGender(gender);
+			
 			if(password.isBlank() == false) {
 				// space or empty 둘 다 처리 
 				vo.setPassword(password);
 			}
 			
 			boolean result = new UserDao().updateUser(vo);
-
+			if(result==true) {
+				authUser.setName(name);
+			}
 //		System.out.println(vo);
 //		request.setAttribute("authUser", vo);
 			MvcUtil.redirect(request.getContextPath(), request, response);
