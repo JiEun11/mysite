@@ -9,11 +9,13 @@ public class BoardVo {
 	private int groupNo;
 	private int orderNo;
 	private int depth;
-	private String redDate;
+	private String regDate;
 	
 //	private UserVo userVo; 객체 지향에서는 이렇게 하는게 맞음. orm hypernate
-	private Long userNo;
+	private Long userNo;	// fk 
 	private String userName;
+	
+	
 	public Long getNo() {
 		return no;
 	}
@@ -56,11 +58,11 @@ public class BoardVo {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	public String getRedDate() {
-		return redDate;
+	public String getRegDate() {
+		return regDate;
 	}
-	public void setRedDate(String redDate) {
-		this.redDate = redDate;
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
 	}
 	public Long getUserNo() {
 		return userNo;
@@ -78,7 +80,7 @@ public class BoardVo {
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", title=" + title + ", contents=" + contents + ", hit=" + hit + ", groupNo="
-				+ groupNo + ", orderNo=" + orderNo + ", depth=" + depth + ", redDate=" + redDate + ", userNo=" + userNo
+				+ groupNo + ", orderNo=" + orderNo + ", depth=" + depth + ", regDate=" + regDate + ", userNo=" + userNo
 				+ ", userName=" + userName + "]";
 	}
 	
