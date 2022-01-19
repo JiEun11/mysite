@@ -27,12 +27,12 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content">${fn:replace(vo.contents, newline, "<br/>") }</textarea>
+								<textarea id="content" name="content">${vo.contents }</textarea>
 							</td>
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="">취소</a>
+						<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }">취소</a>
 						<input type="submit" value="수정">
 					</div>
 				</form>				

@@ -12,6 +12,9 @@ public class BoardActionFactory extends ActionFactory {
 		if("writeform".equals(actionName)) {
 			action = new WriteFormAction();
 		}
+		else if("reply".equals(actionName)) {
+			action = new ReplyAction();
+		}
 		else if("write".equals(actionName)) {
 			action = new WriteAction();
 		}

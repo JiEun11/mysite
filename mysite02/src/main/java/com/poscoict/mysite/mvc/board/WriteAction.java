@@ -23,7 +23,8 @@ public class WriteAction implements Action {
 
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
-
+		boolean result = false;
+		
 		if (authUser == null) {
 			MvcUtil.redirect(request.getContextPath() + "/user?a=loginform", request, response);
 
@@ -32,17 +33,37 @@ public class WriteAction implements Action {
 		} else {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
-
+			
+			// groupNo, orderNo 아무 값도 없으면 ""로 들어옴 
+			String groupNo = request.getParameter("groupNo");
+			String orderNo = request.getParameter("orderNo");
+			String depth = request.getParameter("depth");
+			
 			BoardVo vo = new BoardVo();
-			vo.setTitle(title);
-			vo.setContents(content);
+			vo.setTitle(title);		// 글 작성 시 title 
+			vo.setContents(content);	// content 업뎃은 공통이므로 빼줌  
 //			vo.setHit(0); db에서 default 0
+			
+			// 답글 작성 
+			if(groupNo.isBlank() == false ) {
+				vo.setGroupNo(Integer.parseInt(groupNo));
+				vo.setOrderNo(Integer.parseInt(orderNo));
+				
+				new BoardDao().updateOrderNo(vo.getOrderNo(), vo.getGroupNo());
+				vo.setHit(0);
+				vo.setDepth(Integer.parseInt(depth));
+				vo.setUserNo(authUser.getNo());
+				vo.setUserName(authUser.getName());
+			}
+			// 새 글 작성 
+			else {
 //			vo.setGroupNo(1); dao에서 ifnull이면 1로 처리 
-			vo.setOrderNo(1);
-			vo.setDepth(1);	//default 1로 처리 
-			vo.setUserNo(authUser.getNo());
-			vo.setUserName(authUser.getName());
-			boolean result = new BoardDao().insert(vo);
+				vo.setHit(0);
+				vo.setUserNo(authUser.getNo());
+				vo.setUserName(authUser.getName());				
+			}
+			
+			result = new BoardDao().insert(vo);
 			
 			if (result == false) {
 				System.out.println("게시글 작성 실패");
