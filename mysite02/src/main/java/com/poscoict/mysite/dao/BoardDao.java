@@ -159,7 +159,7 @@ public class BoardDao {
 			conn = getConnection();
 			
 			//3. SQL준비
-			String sql = "SELECT title, contents, g_no, o_no, depth "
+			String sql = "SELECT title, contents, g_no, o_no, depth, user_no "
 					+ "FROM board "
 					+ "WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -176,6 +176,7 @@ public class BoardDao {
 				int groupNo = rs.getInt(3);
 				int orderNo = rs.getInt(4);
 				int depth = rs.getInt(5);
+				long userNo = rs.getLong(6);
 				
 				result = new BoardVo();
 				result.setNo(no);
@@ -185,7 +186,8 @@ public class BoardDao {
 				result.setGroupNo(groupNo);
 				result.setOrderNo(orderNo);
 				result.setDepth(depth);
-			
+				result.setUserNo(userNo);
+				
 			}
 		} catch (SQLException e) {
 			System.out.println("error: " + e);

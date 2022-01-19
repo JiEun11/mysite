@@ -32,10 +32,18 @@
 						</td>
 					</tr>
 				</table>
+				<!-- 
+				---${authUser.no }--- <br/>
+				---${vo.userNo }--- <br/>
+				 -->				
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board">글목록</a>
-					<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${vo.no }">글수정</a>
-					<a href="${pageContext.request.contextPath }/board?a=reply&no=${vo.no }">답글작성</a>
+						<c:if test="${not empty authUser }">
+							<a href="${pageContext.request.contextPath }/board?a=reply&no=${vo.no }">답글작성</a>
+							<c:if test="${authUser.no eq vo.userNo }">
+								<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${vo.no }">글수정</a>
+							</c:if>						
+						</c:if>
 				</div>
 			</div>
 		</div>

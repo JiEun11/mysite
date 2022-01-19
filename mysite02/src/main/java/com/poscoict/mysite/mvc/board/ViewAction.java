@@ -23,7 +23,7 @@ public class ViewAction implements Action {
 //		BoardDao dao = new BoardDao();
 		
 		BoardVo vo = new BoardDao().findOne(Long.parseLong(no)); 
-		// no, title, content return 
+		// no, title, content, groupNo, orderNo, depth return 
 		
 		request.setAttribute("vo", vo);
 		

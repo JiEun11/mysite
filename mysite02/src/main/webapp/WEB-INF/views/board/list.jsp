@@ -45,7 +45,11 @@
 						<td>${vo.userName }</td>
 						<td>${vo.hit }</td>
 						<td>${vo.regDate }</td>
-						<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
+						<c:set var="userName" value="${vo.userName }" />
+						<c:if test="${authUser.name eq userName }">
+							<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
+						</c:if>
+						
 					</tr>
 					
 				</c:forEach>
