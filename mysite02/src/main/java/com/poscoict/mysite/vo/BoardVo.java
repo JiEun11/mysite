@@ -5,16 +5,15 @@ public class BoardVo {
 	private Long no;
 	private String title;
 	private String contents;
-	private int hit;
-	private int groupNo;
-	private int orderNo;
-	private int depth;
+	private Integer hit;
+	private Integer groupNo;
+	private Integer orderNo;
+	private Integer depth;
 	private String regDate;
 	
 //	private UserVo userVo; 객체 지향에서는 이렇게 하는게 맞음. orm hypernate
 	private Long userNo;	// fk 
 	private String userName;
-	
 	
 	public Long getNo() {
 		return no;
@@ -34,28 +33,28 @@ public class BoardVo {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public int getHit() {
+	public Integer getHit() {
 		return hit;
 	}
-	public void setHit(int hit) {
+	public void setHit(Integer hit) {
 		this.hit = hit;
 	}
-	public int getGroupNo() {
+	public Integer getGroupNo() {
 		return groupNo;
 	}
-	public void setGroupNo(int groupNo) {
+	public void setGroupNo(Integer groupNo) {
 		this.groupNo = groupNo;
 	}
-	public int getOrderNo() {
+	public Integer getOrderNo() {
 		return orderNo;
 	}
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	public int getDepth() {
+	public Integer getDepth() {
 		return depth;
 	}
-	public void setDepth(int depth) {
+	public void setDepth(Integer depth) {
 		this.depth = depth;
 	}
 	public String getRegDate() {
@@ -83,6 +82,8 @@ public class BoardVo {
 				+ groupNo + ", orderNo=" + orderNo + ", depth=" + depth + ", regDate=" + regDate + ", userNo=" + userNo
 				+ ", userName=" + userName + "]";
 	}
+	
+	
 	
 	
 }
