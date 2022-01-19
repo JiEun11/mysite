@@ -159,7 +159,7 @@ public class BoardDao {
 			conn = getConnection();
 			
 			//3. SQL준비
-			String sql = "SELECT title, contents, g_no, o_no, depth, user_no "
+			String sql = "SELECT title, contents, g_no, o_no, depth, user_no, hit "
 					+ "FROM board "
 					+ "WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -177,6 +177,7 @@ public class BoardDao {
 				int orderNo = rs.getInt(4);
 				int depth = rs.getInt(5);
 				long userNo = rs.getLong(6);
+				int hit = rs.getInt(7);
 				
 				result = new BoardVo();
 				result.setNo(no);
@@ -187,7 +188,7 @@ public class BoardDao {
 				result.setOrderNo(orderNo);
 				result.setDepth(depth);
 				result.setUserNo(userNo);
-				
+				result.setHit(hit);
 			}
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
@@ -350,6 +351,53 @@ public class BoardDao {
 		
 		return result;
 	}
+	
+	/*
+	 * 조회수 증가 dao 
+	 */
+	public boolean hitUp(BoardVo vo) {
+		boolean result = false;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			//3. SQL준비
+			String sql = "update board set hit=hit+1 where no=?";			
+			pstmt = conn.prepareStatement(sql);
+			
+			// 4. 바인딩(binding)
+			pstmt.setLong(1, vo.getNo());
+			
+			// 5. sql 실행, executeQuery는 rs, executeUpdatesms int로 반환
+			result = (pstmt.executeUpdate() == 1);
+			
+		}	catch (SQLException e) {
+			System.out.println("error: " + e);
+		} finally {
+			// 자원 정리
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+
+	}
+	
 	
 	/*
 	 * driver loading 
