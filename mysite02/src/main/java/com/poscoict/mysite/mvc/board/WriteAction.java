@@ -57,8 +57,11 @@ public class WriteAction implements Action {
 			}
 			// 새 글 작성 
 			else {
-//			vo.setGroupNo(1); dao에서 ifnull이면 1로 처리 
-				vo.setHit(0);
+				//vo.setGroupNo(1); dao에서 ifnull이면 1로 처리 
+				//vo.setHit(0);	할 필요 없음 
+				//vo.setGroupNo(0); 얘도 
+				//vo.setOrderNo(0); 얘도 
+				//vo.setDepth(0); 얘도 dao 에서 쿼리로 박아주면 된다. 
 				vo.setUserNo(authUser.getNo());
 				vo.setUserName(authUser.getName());				
 			}

@@ -15,7 +15,6 @@ public class BoardDao {
 	/*
 	 * 일단 게시글 다 보여주기 
 	 */
-	
 	public List<BoardVo> findAll(){
 		List<BoardVo> result = new ArrayList<>();
 		
@@ -39,6 +38,7 @@ public class BoardDao {
 					+ " WHERE  a.no = b.user_no"
 					+ " ORDER BY b.g_no DESC, b.o_no ASC";
 			pstmt = conn.prepareStatement(sql);
+		
 			
 			// 5. SQL 실행
 			rs = pstmt.executeQuery();
@@ -88,7 +88,151 @@ public class BoardDao {
 		}
 		return result;
 	}
+	
+	/*
+	 *  검색 & 페이징 적용 listAll() 구현 중 
+	 */
+	public List<BoardVo> findAll(int startPage, int limit){
+		List<BoardVo> result = new ArrayList<>();
 		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			// 3. SQL준비
+			String sql = "SELECT b.no,"
+					+ "	b.title,"
+					+ " a.name,"
+					+ "	b.hit,"
+					+ " b.g_no,"
+					+ " b.o_no,"
+					+ " b.depth,"
+					+ " b.contents,"
+					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date"
+					+ "	FROM user a, board b"
+					+ " WHERE  a.no = b.user_no"
+					+ " ORDER BY b.g_no DESC, b.o_no ASC"
+					+ " LIMIT ?, ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			// 4. binding
+			pstmt.setInt(1, startPage);
+			pstmt.setInt(2, limit);
+			
+			// 5. SQL 실행
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				String userName = rs.getString(3);
+				int hit = rs.getInt(4);
+				int groupNo = rs.getInt(5);
+				int orderNo = rs.getInt(6);
+				int depth = rs.getInt(7);
+				String contents = rs.getString(8);
+				String date = rs.getString(9);
+				
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setUserName(userName);
+				vo.setHit(hit);
+				vo.setGroupNo(groupNo);
+				vo.setOrderNo(orderNo);
+				vo.setDepth(depth);
+				vo.setContents(contents);				
+				vo.setRegDate(date);
+				
+//				System.out.println(vo.toString());
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " +e );
+		} finally {
+			// 자원 정리
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	/*
+	 * 게시글 카운트 
+	 */
+	public int pageCnt(String tag, String kwd, int pageDevide) {
+		int total = 0;
+		int pageCount = -1;
+//		int pageDevide = 6;
+		String sql = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			// 3. SQL준비
+			// 전체 출력 , 바로 board로 들어왔을 때 or kwd 아무것도 안 주었을 때 
+			if(kwd.isBlank() == true || tag == null) {
+				sql = "SELECT COUNT(*) FROM board";				
+			}
+			// title, userName, content 검색 시 
+			else {
+				sql = "SELECT COUNT(*) FROM board WHERE "+ tag +"LIKE '%" + kwd + "%'";			
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. binding 
+//			pstmt.setString(1, kwd);
+			
+			// 5. SQL 실행
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1); 
+			}
+			pageCount = total/pageDevide;
+			
+			if(total%pageDevide >= 1) {
+				pageCount += 1;
+//				System.out.println("pageCnt:" +pageCount);
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " +e );
+		} finally {
+			// 자원 정리
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return pageCount;
+	}
+	
 	/*
 	 * 게시글 작성하기
 	 */
@@ -103,22 +247,26 @@ public class BoardDao {
 			String sql = "";
 			//3. SQL준비
 			if(vo.getGroupNo()==null) {
-				sql = "INSERT INTO board VALUES(null,?,?,?,IFNULL((SELECT MAX(?)+1 FROM board b),1),?,?,now(),?)";
+				sql = "INSERT INTO board VALUES(null,?,?,0,IFNULL((SELECT MAX(?)+1 FROM board b),1),1,0,now(),?)";
+				pstmt = conn.prepareStatement(sql);
+				
+				//4. 바인딩
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				pstmt.setLong(3, vo.getUserNo());
+				
 			}else {
-				sql = "INSERT INTO board VALUES(null,?,?,?,?,?,?,now(),?)";;
+				sql = "INSERT INTO board VALUES(null,?,?,?,?,?,?,now(),?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				pstmt.setInt(3, vo.getHit());
+				pstmt.setInt(4, vo.getGroupNo());				
+				pstmt.setInt(5, vo.getOrderNo());
+				pstmt.setInt(6, vo.getDepth()+1);	   
+				pstmt.setLong(7, vo.getUserNo());
 			}
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			//4. 바인딩
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setInt(3, vo.getHit());	  
-			pstmt.setInt(4, vo.getGroupNo());
-			pstmt.setInt(5, vo.getOrderNo());  
-			pstmt.setInt(6, vo.getDepth()+1);	   
-			pstmt.setLong(7, vo.getUserNo());
-			
+
 			//5. SQL실행
 			int count = pstmt.executeUpdate();
 			result = count == 1; //count==1이면 true, count==1이 아니면 false
