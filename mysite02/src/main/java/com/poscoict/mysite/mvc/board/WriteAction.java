@@ -50,6 +50,7 @@ public class WriteAction implements Action {
 				vo.setOrderNo(Integer.parseInt(orderNo));
 				
 				new BoardDao().updateOrderNo(vo.getOrderNo(), vo.getGroupNo());
+				vo.setOrderNo(vo.getOrderNo()+1);
 				vo.setHit(0);
 				vo.setDepth(Integer.parseInt(depth));
 				vo.setUserNo(authUser.getNo());

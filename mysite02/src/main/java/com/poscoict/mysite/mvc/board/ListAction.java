@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.poscoict.mysite.dao.BoardDao;
 import com.poscoict.mysite.vo.BoardVo;
+import com.poscoict.mysite.vo.PageVo;
 import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
@@ -16,18 +17,35 @@ public class ListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-//		int pageCount = 10;
-//		int currentPage = 2;
-//		int nextPage = -1;
-//		int startPage = 3;
-//		int prePage 는 2가 되겠다. link는 2를 줘야겠다
-//		pagerInfo 객체를 만들던지
-//		Map m;
-//		m.put으로 담아놓고 request 통해서넘겨놓고..
-		BoardDao dao = new BoardDao();
-		List<BoardVo> list = dao.findAll();
 		
+		BoardDao dao = new BoardDao();
+		PageVo pvo = new PageVo();
+		
+		String tag = request.getParameter("search_tag");
+		String kwd = request.getParameter("kwd");
+		String currentPage = request.getParameter("currentPage");
+//		int currentPage = 0;
+		
+		int boardTotalCnt = dao.boardTotalCnt(tag, kwd);	// 게시글 총 개수
+		
+		int pageTotalCnt = boardTotalCnt / pvo.getBoardLimit();	// 페이지 총 개수
+		if( boardTotalCnt % pvo.getBoardLimit() >= 1) {
+			pageTotalCnt ++;
+		}
+	
+		if(currentPage != null) {
+			pvo.setCurrentPage(Integer.parseInt(currentPage));
+		}
+		else {
+			pvo.setCurrentPage(1);
+		}
+		
+		pvo.setBoardTotalCnt(boardTotalCnt);
+		pvo.setPageTotalCnt(pageTotalCnt);
+		
+		request.setAttribute("pvo", pvo);
+		
+		List<BoardVo> list = dao.findAll(pvo.getCurrentPage(), pvo.getBoardLimit());
 		request.setAttribute("list", list);
 		MvcUtil.forward("board/list", request, response);
 

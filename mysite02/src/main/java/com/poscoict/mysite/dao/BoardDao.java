@@ -33,7 +33,8 @@ public class BoardDao {
 					+ " b.o_no,"
 					+ " b.depth,"
 					+ " b.contents,"
-					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date"
+					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+					+ " a.no"
 					+ "	FROM user a, board b"
 					+ " WHERE  a.no = b.user_no"
 					+ " ORDER BY b.g_no DESC, b.o_no ASC";
@@ -92,7 +93,8 @@ public class BoardDao {
 	/*
 	 *  검색 & 페이징 적용 listAll() 구현 중 
 	 */
-	public List<BoardVo> findAll(int startPage, int limit){
+	public List<BoardVo> findAll(int currentPage, int boardLimit){
+		
 		List<BoardVo> result = new ArrayList<>();
 		
 		Connection conn = null;
@@ -110,7 +112,8 @@ public class BoardDao {
 					+ " b.o_no,"
 					+ " b.depth,"
 					+ " b.contents,"
-					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date"
+					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+					+ " a.no"
 					+ "	FROM user a, board b"
 					+ " WHERE  a.no = b.user_no"
 					+ " ORDER BY b.g_no DESC, b.o_no ASC"
@@ -118,8 +121,8 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. binding
-			pstmt.setInt(1, startPage);
-			pstmt.setInt(2, limit);
+			pstmt.setInt(1, boardLimit * (currentPage-1));
+			pstmt.setInt(2, boardLimit);
 			
 			// 5. SQL 실행
 			rs = pstmt.executeQuery();
@@ -134,6 +137,7 @@ public class BoardDao {
 				int depth = rs.getInt(7);
 				String contents = rs.getString(8);
 				String date = rs.getString(9);
+				Long userNo = rs.getLong(10);
 				
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
@@ -145,6 +149,7 @@ public class BoardDao {
 				vo.setDepth(depth);
 				vo.setContents(contents);				
 				vo.setRegDate(date);
+				vo.setUserNo(userNo);
 				
 //				System.out.println(vo.toString());
 				result.add(vo);
@@ -173,10 +178,8 @@ public class BoardDao {
 	/*
 	 * 게시글 카운트 
 	 */
-	public int pageCnt(String tag, String kwd, int pageDevide) {
-		int total = 0;
-		int pageCount = -1;
-//		int pageDevide = 6;
+	public int boardTotalCnt(String tag, String kwd) {
+		int pageTotalCnt = 0;
 		String sql = null;
 		
 		Connection conn = null;
@@ -186,8 +189,9 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			// 3. SQL준비
+			
 			// 전체 출력 , 바로 board로 들어왔을 때 or kwd 아무것도 안 주었을 때 
-			if(kwd.isBlank() == true || tag == null) {
+			if( kwd == null || kwd.isBlank() == true || tag == null) {
 				sql = "SELECT COUNT(*) FROM board";				
 			}
 			// title, userName, content 검색 시 
@@ -197,21 +201,16 @@ public class BoardDao {
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			//4. binding 
+			//4. binding  미리 해줘서 필요 없음 
 //			pstmt.setString(1, kwd);
 			
 			// 5. SQL 실행
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				total = rs.getInt(1); 
+				pageTotalCnt = rs.getInt(1); 
 			}
-			pageCount = total/pageDevide;
-			
-			if(total%pageDevide >= 1) {
-				pageCount += 1;
-//				System.out.println("pageCnt:" +pageCount);
-			}
+
 		} catch (SQLException e) {
 			System.out.println("error: " +e );
 		} finally {
@@ -230,7 +229,7 @@ public class BoardDao {
 				e.printStackTrace();
 			}
 		}
-		return pageCount;
+		return pageTotalCnt;
 	}
 	
 	/*
@@ -247,12 +246,13 @@ public class BoardDao {
 			String sql = "";
 			//3. SQL준비
 			if(vo.getGroupNo()==null) {
-				sql = "INSERT INTO board VALUES(null,?,?,0,IFNULL((SELECT MAX(?)+1 FROM board b),1),1,0,now(),?)";
+				sql = "INSERT INTO board VALUES(null,?,?,0,IFNULL((SELECT MAX(g_no)+1 FROM board b),1),1,0,now(),?)";
 				pstmt = conn.prepareStatement(sql);
 				
 				//4. 바인딩
 				pstmt.setString(1, vo.getTitle());
 				pstmt.setString(2, vo.getContents());
+//				pstmt.setInt(3, vo.getGroupNo());
 				pstmt.setLong(3, vo.getUserNo());
 				
 			}else {

@@ -14,7 +14,12 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
+					<select name="search_tag">
+						<option value="title">제목</option>
+						<option value="userName">작성자</option>
+						<option value="content">내용</option>
+					</select>
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -30,9 +35,10 @@
 					<c:set var="count" value="${fn:length(list) }" />
 					<c:forEach items="${list }" var="vo" varStatus="status">
 					<tr>
-						<td>${count-status.index }</td>
+						<!-- <td>${count-status.index }</td> -->
+						<td>${status.count }</td>
 						<c:choose>
-							<c:when test="${1 eq vo.depth}">
+							<c:when test="${0 eq vo.depth}">
 								<td style="text-align:left; padding-left:0px">
 								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
 							</c:when>
@@ -45,8 +51,7 @@
 						<td>${vo.userName }</td>
 						<td>${vo.hit }</td>
 						<td>${vo.regDate }</td>
-						<c:set var="userName" value="${vo.userName }" />
-						<c:if test="${authUser.name eq userName }">
+						<c:if test="${authUser.no eq vo.userNo }">
 							<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
 						</c:if>
 						
@@ -59,11 +64,25 @@
 				<div class="pager">
 					<ul>
 						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
+						<c:forEach var="var" begin="1" end="${pvo.pageTotalCnt }" step="1" varStatus="status">
+							<c:choose>
+								<c:when test="${var == pvo.currentPage }">
+									<li class="selected">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+						 		<a href="${pageContext.request.contextPath }/board?currentPage=${pvo.currentPage }">${status.count }</a>
+							</li>
+						</c:forEach>
+						
+						<!--  <li><a href="">1</a></li>
 						<li class="selected">2</li>
 						<li><a href="">3</a></li>
 						<li>4</li>
 						<li>5</li>
+						-->
 						<li><a href="">▶</a></li>
 					</ul>
 				</div>					
