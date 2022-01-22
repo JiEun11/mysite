@@ -21,16 +21,16 @@
 					<input type = "hidden" name = "depth" value="${vo.depth }">
 					<table class="tbl-ex">
 						<tr>
-							<th colspan="2">글쓰기</th>
+							<th colspan="2">글쓰기 ${vo.groupNo }</th>
 						</tr>
 						<tr>
-							<td class="label">제목</td>
-							<td><input type="text" name="title" value=""></td>
+							<td class="label">제목 ${vo.orderNo }</td>
+							<td><input type="text" maxlength="200" name="title" value="" placeholder="제목을 입력하세요."></td>
 						</tr>
 						<tr>
-							<td class="label">내용</td>
+							<td class="label">내용 ${vo.depth }</td>
 							<td>
-								<textarea id="content" name="content"></textarea>
+								<textarea id="content" name="content" placeholder="글 내용을 입력하세요."></textarea>
 							</td>
 						</tr>
 					</table>

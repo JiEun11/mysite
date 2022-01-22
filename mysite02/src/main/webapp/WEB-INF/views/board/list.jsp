@@ -35,8 +35,8 @@
 					<c:set var="count" value="${fn:length(list) }" />
 					<c:forEach items="${list }" var="vo" varStatus="status">
 					<tr>
-						<!-- <td>${count-status.index }</td> -->
-						<td>${status.count }</td>
+						<td>${count-status.index }</td>
+						<!-- <td>${status.count }</td>-->
 						<c:choose>
 							<c:when test="${0 eq vo.depth}">
 								<td style="text-align:left; padding-left:0px">

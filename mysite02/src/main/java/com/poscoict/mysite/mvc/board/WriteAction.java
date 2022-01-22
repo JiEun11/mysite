@@ -35,36 +35,35 @@ public class WriteAction implements Action {
 			String content = request.getParameter("content");
 			
 			// groupNo, orderNo 아무 값도 없으면 ""로 들어옴 
-			String groupNo = request.getParameter("groupNo");
-			String orderNo = request.getParameter("orderNo");
+			String sgroupNo = request.getParameter("groupNo");
+			String sorderNo = request.getParameter("orderNo");
 			String depth = request.getParameter("depth");
 			
 			BoardVo vo = new BoardVo();
-			vo.setTitle(title);		// 글 작성 시 title 
-			vo.setContents(content);	// content 업뎃은 공통이므로 빼줌  
-//			vo.setHit(0); db에서 default 0
+		
 			
-			// 답글 작성 
-			if(groupNo.isBlank() == false ) {
-				vo.setGroupNo(Integer.parseInt(groupNo));
-				vo.setOrderNo(Integer.parseInt(orderNo));
-				
-				new BoardDao().updateOrderNo(vo.getOrderNo(), vo.getGroupNo());
-				vo.setOrderNo(vo.getOrderNo()+1);
-				vo.setHit(0);
-				vo.setDepth(Integer.parseInt(depth));
-				vo.setUserNo(authUser.getNo());
-				vo.setUserName(authUser.getName());
-			}
 			// 새 글 작성 
-			else {
-				//vo.setGroupNo(1); dao에서 ifnull이면 1로 처리 
-				//vo.setHit(0);	할 필요 없음 
-				//vo.setGroupNo(0); 얘도 
-				//vo.setOrderNo(0); 얘도 
-				//vo.setDepth(0); 얘도 dao 에서 쿼리로 박아주면 된다. 
+			if(sgroupNo.isBlank() == true && sorderNo.isBlank() == true) {
+				vo.setTitle(title);		
+				vo.setContents(content);
 				vo.setUserNo(authUser.getNo());
-				vo.setUserName(authUser.getName());				
+				System.out.println(vo.getGroupNo());
+			}
+			// 답글 작성 
+			else {
+				vo.setTitle(title);		
+				vo.setContents(content);
+				int groupNo = Integer.parseInt(sgroupNo);
+				int orderNo = Integer.parseInt(sorderNo);
+				
+				// orderNo 증가 
+				new BoardDao().updateOrderNo(orderNo, groupNo);
+				
+				vo.setGroupNo(groupNo);
+				vo.setOrderNo(orderNo+1);
+				vo.setDepth(Integer.parseInt(depth)+1);
+				vo.setUserNo(authUser.getNo());
+								
 			}
 			
 			result = new BoardDao().insert(vo);

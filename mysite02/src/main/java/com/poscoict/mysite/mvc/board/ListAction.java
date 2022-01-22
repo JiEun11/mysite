@@ -22,7 +22,9 @@ public class ListAction implements Action {
 		PageVo pvo = new PageVo();
 		
 		String tag = request.getParameter("search_tag");
+//		System.out.println(tag);
 		String kwd = request.getParameter("kwd");
+//		System.out.println(kwd);
 		String currentPage = request.getParameter("currentPage");
 //		int currentPage = 0;
 		
@@ -45,7 +47,8 @@ public class ListAction implements Action {
 		
 		request.setAttribute("pvo", pvo);
 		
-		List<BoardVo> list = dao.findAll(pvo.getCurrentPage(), pvo.getBoardLimit());
+		List<BoardVo> list = dao.findAll();
+//		List<BoardVo> list = dao.findAll(pvo.getCurrentPage(), pvo.getBoardLimit());
 		request.setAttribute("list", list);
 		MvcUtil.forward("board/list", request, response);
 

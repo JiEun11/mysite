@@ -16,13 +16,14 @@ public class BoardDao {
 	 * 일단 게시글 다 보여주기 
 	 */
 	public List<BoardVo> findAll(){
-		List<BoardVo> result = new ArrayList<>();
+		List<BoardVo> result = null;
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
+			result = new ArrayList<>();
 			conn = getConnection();
 			// 3. SQL준비
 			String sql = "SELECT b.no,"
@@ -54,6 +55,7 @@ public class BoardDao {
 				int depth = rs.getInt(7);
 				String contents = rs.getString(8);
 				String date = rs.getString(9);
+				Long userNo = rs.getLong(10);
 				
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
@@ -65,6 +67,7 @@ public class BoardDao {
 				vo.setDepth(depth);
 				vo.setContents(contents);				
 				vo.setRegDate(date);
+				vo.setUserNo(userNo);
 				
 //				System.out.println(vo.toString());
 				result.add(vo);
@@ -174,12 +177,12 @@ public class BoardDao {
 		}
 		return result;
 	}
-	
+
 	/*
 	 * 게시글 카운트 
 	 */
 	public int boardTotalCnt(String tag, String kwd) {
-		int pageTotalCnt = 0;
+		int boardTotalCnt = 0;
 		String sql = null;
 		
 		Connection conn = null;
@@ -192,23 +195,25 @@ public class BoardDao {
 			
 			// 전체 출력 , 바로 board로 들어왔을 때 or kwd 아무것도 안 주었을 때 
 			if( kwd == null || kwd.isBlank() == true || tag == null) {
-				sql = "SELECT COUNT(*) FROM board";				
+				sql = "SELECT COUNT(*) FROM board";		
+				pstmt = conn.prepareStatement(sql);
 			}
 			// title, userName, content 검색 시 
 			else {
-				sql = "SELECT COUNT(*) FROM board WHERE "+ tag +"LIKE '%" + kwd + "%'";			
+//				sql = "SELECT COUNT(*) FROM board WHERE "+ tag +"LIKE '%" + kwd + "%'";			
+				sql = "SELECT COUNT(*) FROM board WHERE ? LIKE '%?%' ";
+				pstmt = conn.prepareStatement(sql);
+				
+				//4. binding 
+				pstmt.setString(1, tag);
+				pstmt.setString(2, kwd);
 			}
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			//4. binding  미리 해줘서 필요 없음 
-//			pstmt.setString(1, kwd);
 			
 			// 5. SQL 실행
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				pageTotalCnt = rs.getInt(1); 
+				boardTotalCnt = rs.getInt(1); 
 			}
 
 		} catch (SQLException e) {
@@ -229,8 +234,10 @@ public class BoardDao {
 				e.printStackTrace();
 			}
 		}
-		return pageTotalCnt;
+		return boardTotalCnt;
 	}
+	
+	
 	
 	/*
 	 * 게시글 작성하기
@@ -252,19 +259,17 @@ public class BoardDao {
 				//4. 바인딩
 				pstmt.setString(1, vo.getTitle());
 				pstmt.setString(2, vo.getContents());
-//				pstmt.setInt(3, vo.getGroupNo());
 				pstmt.setLong(3, vo.getUserNo());
 				
 			}else {
-				sql = "INSERT INTO board VALUES(null,?,?,?,?,?,?,now(),?)";
+				sql = "INSERT INTO board VALUES(null,?,?,0,?,?,?,now(),?)";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, vo.getTitle());
 				pstmt.setString(2, vo.getContents());
-				pstmt.setInt(3, vo.getHit());
-				pstmt.setInt(4, vo.getGroupNo());				
-				pstmt.setInt(5, vo.getOrderNo());
-				pstmt.setInt(6, vo.getDepth()+1);	   
-				pstmt.setLong(7, vo.getUserNo());
+				pstmt.setInt(3, vo.getGroupNo());				
+				pstmt.setInt(4, vo.getOrderNo());
+				pstmt.setInt(5, vo.getDepth());	   
+				pstmt.setLong(6, vo.getUserNo());
 			}
 
 			//5. SQL실행
