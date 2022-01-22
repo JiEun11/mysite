@@ -29,12 +29,18 @@ public class ListAction implements Action {
 //		int currentPage = 0;
 		
 		int boardTotalCnt = dao.boardTotalCnt(tag, kwd);	// 게시글 총 개수
+//		System.out.println("게시글 총 개수 " +boardTotalCnt);
+		
+		if(kwd == null || kwd.isBlank()==true) {
+			kwd = "";
+		}
 		
 		int pageTotalCnt = boardTotalCnt / pvo.getBoardLimit();	// 페이지 총 개수
 		if( boardTotalCnt % pvo.getBoardLimit() >= 1) {
 			pageTotalCnt ++;
 		}
-	
+//		System.out.println("pageTotalCnt " + pageTotalCnt);
+		
 		if(currentPage != null) {
 			pvo.setCurrentPage(Integer.parseInt(currentPage));
 		}
@@ -47,8 +53,8 @@ public class ListAction implements Action {
 		
 		request.setAttribute("pvo", pvo);
 		
-		List<BoardVo> list = dao.findAll();
-//		List<BoardVo> list = dao.findAll(pvo.getCurrentPage(), pvo.getBoardLimit());
+//		List<BoardVo> list = dao.findAll();
+		List<BoardVo> list = dao.findAll(pvo.getCurrentPage(), pvo.getBoardLimit(), tag, kwd);
 		request.setAttribute("list", list);
 		MvcUtil.forward("board/list", request, response);
 

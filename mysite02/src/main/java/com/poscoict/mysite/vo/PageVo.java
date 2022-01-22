@@ -2,12 +2,14 @@ package com.poscoict.mysite.vo;
 
 public class PageVo {
 
-	private int boardLimit = 7;		// 한 페이지에 보여줄 게시글 개수 
-	private int pageTotalCnt; 	// 페이지 총 개수
+	private int boardLimit = 5;		// 한 페이지에 보여줄 게시글 개수 
+	private int pageLimit = 5;		// 한 페이지에 표시할 페이지 개수 
+	private int pageTotalCnt; 		// 페이지 총 개수
 	private int boardTotalCnt;		// 총 글 개수 
-	private int currentPage;	// 현재 페이지
-	private int nextPage;		// 다음 페이지 
+	private int currentPage;		// 현재 페이지
+	private int nextPage;			// 다음 페이지 
 	private int prePage = -1;		// 화살표 표시를 위한 변수 
+
 	
 	public int getBoardLimit() {
 		return boardLimit;
@@ -15,8 +17,15 @@ public class PageVo {
 //	public void setBoardLimit(int boardLimit) {
 //		this.boardLimit = boardLimit;
 //	}
+	
 	public int getPageTotalCnt() {
 		return pageTotalCnt;
+	}
+	public int getPageLimit() {
+		return pageLimit;
+	}
+	public void setPageLimit(int pageLimit) {
+		this.pageLimit = pageLimit;
 	}
 	public void setPageTotalCnt(int pageTotalCnt) {
 		this.pageTotalCnt = pageTotalCnt;
@@ -45,7 +54,7 @@ public class PageVo {
 	public void setPrePage(int prePage) {
 		this.prePage = prePage;
 	}
-	
+
 	
 	
 }

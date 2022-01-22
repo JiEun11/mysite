@@ -17,8 +17,8 @@
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
 					<select name="search_tag">
 						<option value="title">제목</option>
-						<option value="userName">작성자</option>
-						<option value="content">내용</option>
+						<option value="name">작성자</option>
+						<option value="contents">내용</option>
 					</select>
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
@@ -32,10 +32,11 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>				
-					<c:set var="count" value="${fn:length(list) }" />
+					<!--<c:set var="count" value="${fn:length(list) }" />-->
+					<c:set var="count" value="${pvo.boardTotalCnt }"/>
 					<c:forEach items="${list }" var="vo" varStatus="status">
 					<tr>
-						<td>${count-status.index }</td>
+						<td>${count- status.index- (pvo.currentPage -1)* pvo.boardLimit }</td>
 						<!-- <td>${status.count }</td>-->
 						<c:choose>
 							<c:when test="${0 eq vo.depth}">
@@ -73,7 +74,7 @@
 									<li>
 								</c:otherwise>
 							</c:choose>
-						 		<a href="${pageContext.request.contextPath }/board?currentPage=${pvo.currentPage }">${status.count }</a>
+						 		<a href="${pageContext.request.contextPath }/board?currentPage=${status.count }">${status.count }</a>
 							</li>
 						</c:forEach>
 						

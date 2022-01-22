@@ -96,7 +96,7 @@ public class BoardDao {
 	/*
 	 *  검색 & 페이징 적용 listAll() 구현 중 
 	 */
-	public List<BoardVo> findAll(int currentPage, int boardLimit){
+	public List<BoardVo> findAll(int currentPage, int boardLimit, String tag, String kwd){
 		
 		List<BoardVo> result = new ArrayList<>();
 		
@@ -105,27 +105,53 @@ public class BoardDao {
 		ResultSet rs = null;
 		
 		try {
+			
 			conn = getConnection();
 			// 3. SQL준비
-			String sql = "SELECT b.no,"
-					+ "	b.title,"
-					+ " a.name,"
-					+ "	b.hit,"
-					+ " b.g_no,"
-					+ " b.o_no,"
-					+ " b.depth,"
-					+ " b.contents,"
-					+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
-					+ " a.no"
-					+ "	FROM user a, board b"
-					+ " WHERE  a.no = b.user_no"
-					+ " ORDER BY b.g_no DESC, b.o_no ASC"
-					+ " LIMIT ?, ?";
-			pstmt = conn.prepareStatement(sql);
-			
-			// 4. binding
-			pstmt.setInt(1, boardLimit * (currentPage-1));
-			pstmt.setInt(2, boardLimit);
+			String sql = null;
+			if(tag == null) {
+				sql = "SELECT b.no,"
+						+ "	b.title,"
+						+ " a.name,"
+						+ "	b.hit,"
+						+ " b.g_no,"
+						+ " b.o_no,"
+						+ " b.depth,"
+						+ " b.contents,"
+						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+						+ " a.no"
+						+ "	FROM user a, board b"
+						+ " WHERE  a.no = b.user_no"
+						+ " ORDER BY b.g_no DESC, b.o_no ASC"
+						+ " LIMIT ?, ?";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				// 4. binding
+				pstmt.setInt(1, boardLimit * (currentPage-1));
+				pstmt.setInt(2, boardLimit);
+			}else {
+				sql = "SELECT b.no,"
+						+ "	b.title,"
+						+ " a.name,"
+						+ "	b.hit,"
+						+ " b.g_no,"
+						+ " b.o_no,"
+						+ " b.depth,"
+						+ " b.contents,"
+						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+						+ " a.no"
+						+ "	FROM user a, board b"
+						+ " WHERE  a.no = b.user_no AND "+ tag +" LIKE '%" + kwd + "%'"
+						+ " ORDER BY b.g_no DESC, b.o_no ASC"
+						+ " LIMIT ?, ?";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				// 4. binding
+				pstmt.setInt(1, boardLimit * (currentPage-1));
+				pstmt.setInt(2, boardLimit);
+			}
 			
 			// 5. SQL 실행
 			rs = pstmt.executeQuery();
@@ -154,7 +180,6 @@ public class BoardDao {
 				vo.setRegDate(date);
 				vo.setUserNo(userNo);
 				
-//				System.out.println(vo.toString());
 				result.add(vo);
 			}
 		} catch (SQLException e) {
@@ -200,13 +225,13 @@ public class BoardDao {
 			}
 			// title, userName, content 검색 시 
 			else {
-//				sql = "SELECT COUNT(*) FROM board WHERE "+ tag +"LIKE '%" + kwd + "%'";			
-				sql = "SELECT COUNT(*) FROM board WHERE ? LIKE '%?%' ";
+				sql = "SELECT COUNT(*) FROM user a, board b WHERE a.no = b.user_no AND "+ tag +" LIKE '%" + kwd + "%'";			
+//				sql = "SELECT COUNT(*) FROM board WHERE ? LIKE '%?%' ";
 				pstmt = conn.prepareStatement(sql);
 				
 				//4. binding 
-				pstmt.setString(1, tag);
-				pstmt.setString(2, kwd);
+//				pstmt.setString(1, tag);
+//				pstmt.setString(2, kwd);
 			}
 			
 			// 5. SQL 실행
