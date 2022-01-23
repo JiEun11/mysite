@@ -16,11 +16,11 @@
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
 					<select name="search_tag">
-						<option value="title">제목</option>
+						<option value="title" selected>제목</option>
 						<option value="name">작성자</option>
 						<option value="contents">내용</option>
 					</select>
-					<input type="text" id="kwd" name="kwd" value="">
+					<input type="text" id="kwd" name="kwd" value="${pvo.kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -74,7 +74,7 @@
 									<li>
 								</c:otherwise>
 							</c:choose>
-						 		<a href="${pageContext.request.contextPath }/board?currentPage=${status.count }">${status.count }</a>
+						 		<a href="${pageContext.request.contextPath }/board?currentPage=${status.count }&search_tag=${pvo.tag }&kwd=${pvo.kwd }">${status.count }</a>
 							</li>
 						</c:forEach>
 						

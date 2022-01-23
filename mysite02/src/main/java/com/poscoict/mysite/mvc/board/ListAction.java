@@ -22,17 +22,20 @@ public class ListAction implements Action {
 		PageVo pvo = new PageVo();
 		
 		String tag = request.getParameter("search_tag");
-//		System.out.println(tag);
-		String kwd = request.getParameter("kwd");
-//		System.out.println(kwd);
+//		System.out.println("tag: "+tag);
+		String kwd = request.getParameter("kwd");	//처음엔 Null, 다음엔 공백
+//		System.out.println("kwd: "+kwd);
 		String currentPage = request.getParameter("currentPage");
 //		int currentPage = 0;
 		
 		int boardTotalCnt = dao.boardTotalCnt(tag, kwd);	// 게시글 총 개수
 //		System.out.println("게시글 총 개수 " +boardTotalCnt);
 		
-		if(kwd == null || kwd.isBlank()==true) {
-			kwd = "";
+		if(tag != null) {	// tag 값 셋팅 
+			pvo.setTag(tag);
+		}
+		if(kwd != null && kwd.isBlank()==false) {
+			pvo.setKwd(kwd);	// kwd 공백이나 null 아니면 객체에 셋팅 
 		}
 		
 		int pageTotalCnt = boardTotalCnt / pvo.getBoardLimit();	// 페이지 총 개수

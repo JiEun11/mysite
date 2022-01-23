@@ -9,7 +9,8 @@ public class PageVo {
 	private int currentPage;		// 현재 페이지
 	private int nextPage;			// 다음 페이지 
 	private int prePage = -1;		// 화살표 표시를 위한 변수 
-
+	private String tag;				// 찾고자 하는 태그 저장 변수 
+	private String kwd="";			// keyword 저장 변수 
 	
 	public int getBoardLimit() {
 		return boardLimit;
@@ -54,7 +55,17 @@ public class PageVo {
 	public void setPrePage(int prePage) {
 		this.prePage = prePage;
 	}
-
-	
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	public String getKwd() {
+		return kwd;
+	}
+	public void setKwd(String kwd) {
+		this.kwd = kwd;
+	}
 	
 }

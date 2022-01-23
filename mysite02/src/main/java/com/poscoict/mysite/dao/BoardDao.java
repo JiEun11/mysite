@@ -109,7 +109,7 @@ public class BoardDao {
 			conn = getConnection();
 			// 3. SQL준비
 			String sql = null;
-			if(tag == null) {
+			if(tag == null || tag.isBlank()==true) {
 				sql = "SELECT b.no,"
 						+ "	b.title,"
 						+ " a.name,"
@@ -219,7 +219,7 @@ public class BoardDao {
 			// 3. SQL준비
 			
 			// 전체 출력 , 바로 board로 들어왔을 때 or kwd 아무것도 안 주었을 때 
-			if( kwd == null || kwd.isBlank() == true || tag == null) {
+			if( kwd == null || tag == null || kwd.isBlank()==true ) {
 				sql = "SELECT COUNT(*) FROM board";		
 				pstmt = conn.prepareStatement(sql);
 			}
