@@ -16,9 +16,23 @@
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
 					<select name="search_tag">
-						<option value="title" selected>제목</option>
-						<option value="name">작성자</option>
-						<option value="contents">내용</option>
+					<c:choose>
+						<c:when test="${pvo.tag eq 'name'}">
+							<option value="title">제목</option>
+							<option value="name" selected>작성자</option>
+							<option value="contents">내용</option>
+						</c:when>
+						<c:when test="${pvo.tag eq 'contents'}">
+							<option value="title">제목</option>
+							<option value="name">작성자</option>
+							<option value="contents" selected>내용</option>
+						</c:when>
+						<c:otherwise>
+							<option value="title">제목</option>
+							<option value="name">작성자</option>
+							<option value="contents">내용</option>
+						</c:otherwise>
+					</c:choose>
 					</select>
 					<input type="text" id="kwd" name="kwd" value="${pvo.kwd }">
 					<input type="submit" value="찾기">
@@ -64,7 +78,9 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
+					<c:if test="${pvo.currentPage ne 1 }">
 						<li><a href="">◀</a></li>
+					</c:if>
 						<c:forEach var="var" begin="1" end="${pvo.pageTotalCnt }" step="1" varStatus="status">
 							<c:choose>
 								<c:when test="${var == pvo.currentPage }">
@@ -84,7 +100,9 @@
 						<li>4</li>
 						<li>5</li>
 						-->
+						<c:if test="${pvo.currentPage ne pvo.pageTotalCnt }">
 						<li><a href="">▶</a></li>
+						</c:if>
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
