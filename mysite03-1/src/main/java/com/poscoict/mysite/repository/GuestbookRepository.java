@@ -28,7 +28,6 @@ public class GuestbookRepository {
 			// 3. SQL준비
 			String sql = "SELECT no,"
 					+ "	name, "
-					+ " password,"
 					+ "	message,"
 					+ "	DATE_FORMAT(reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date"
 					+ "	FROM guestbook "
@@ -39,16 +38,14 @@ public class GuestbookRepository {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				int no = rs.getInt(1);
+				Long no = rs.getLong(1);
 				String name = rs.getString(2);
-				String password = rs.getString(3);
-				String message = rs.getString(4);
-				String date = rs.getString(5);
+				String message = rs.getString(3);
+				String date = rs.getString(4);
 				
 				GuestbookVo gbvo = new GuestbookVo();
 				gbvo.setNo(no);
 				gbvo.setName(name);
-				gbvo.setPassword(password);
 				gbvo.setRegDate(date);
 				gbvo.setMessage(message);
 				
@@ -75,11 +72,10 @@ public class GuestbookRepository {
 		return result;
 	}
 	
-	public boolean insert(GuestbookVo gbvo) {
-		boolean result = false;
+	public int insert(GuestbookVo vo) {
+		int result = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
@@ -89,22 +85,18 @@ public class GuestbookRepository {
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩
-			pstmt.setString(1, gbvo.getName());
-			pstmt.setString(2, gbvo.getPassword());
-			pstmt.setString(3, gbvo.getMessage());
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getPassword());
+			pstmt.setString(3, vo.getMessage());
 			
 			//5. SQL실행
-			int count = pstmt.executeUpdate();
-			result = count == 1; //count==1이면 true, count==1이 아니면 false
+			result= pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		} finally {
 			// 자원 정리
 			try {
-				if (rs != null) {
-					rs.close();
-				}
 				if (pstmt != null) {
 					pstmt.close();
 				}
@@ -119,11 +111,20 @@ public class GuestbookRepository {
 		return result;
 	}
 	
-	public boolean delete(Long no, String password) {
-		boolean result = false;
+	public int delete(Long no, String password) {
+		GuestbookVo vo = new GuestbookVo();
+		vo.setNo(no);
+		vo.setPassword(password);
+		
+		return delete(vo);
+	}
+	
+	
+	public int delete(GuestbookVo vo) {
+		int result = 0;
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
@@ -133,21 +134,17 @@ public class GuestbookRepository {
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. 바인딩
-			pstmt.setLong(1, no);
-			pstmt.setString(2, password);
+			pstmt.setLong(1, vo.getNo());
+			pstmt.setString(2, vo.getPassword());
 			
 			// 5. SQL 실행
-			int count = pstmt.executeUpdate();
-			result = count==1;
+			result = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("error: " +e);
 		} finally {
 			//자원 정리
 			try {
-				if(rs!=null) {
-					rs.close();
-				}
 				if(pstmt != null) {
 					pstmt.close();
 				}
