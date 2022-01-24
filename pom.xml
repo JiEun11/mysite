@@ -11,7 +11,7 @@
 	</properties>
 
 	<dependencies>
-	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+	<!-- JSTL -->
 		<dependency>
 		    <groupId>jstl</groupId>
 		    <artifactId>jstl</artifactId>
@@ -81,5 +81,6 @@
 	
 	<modules>
 		<module>mysite02</module>
+		<module>mysite03</module>
 	</modules>
 </project>

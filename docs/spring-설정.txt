@@ -1,0 +1,17 @@
+1. maven project(module) 생성
+2. web.xml 추가 (JAVA EE Tools -> Generate Deployment Descriptor Stub)
+3. mysite03 -> properties -> target runtime 설정 
+4. pom.xml 설정 
+5. web.xml 설정 
+	1) /WEB-INF/applicationContext.xml (Root Application Context)
+	2) /WEB-INF/spring-servlet.xml (Web Application Context)
+
+6. package
+	com.poscoict.mysite.controller
+	com.poscoict.mysite.service
+	com.poscoict.mysite.repository
+	com.poscoict.mysite.vo
+	
+7. /WEB-INF/views/*/*.jsp 정리 
+8. Controller, Service, Repository 구현 작업 
+ 
