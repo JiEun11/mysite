@@ -222,7 +222,7 @@ public class BoardRepository {
 			// 3. SQL준비
 			
 			// 전체 출력 , 바로 board로 들어왔을 때 or kwd 아무것도 안 주었을 때 
-			if( kwd == null || tag == null || kwd.isBlank()==true ) {
+			if( kwd == null || tag.isBlank()==true || kwd.isBlank()==true ) {
 				sql = "SELECT COUNT(*) FROM board";		
 				pstmt = conn.prepareStatement(sql);
 			}
@@ -392,6 +392,49 @@ public class BoardRepository {
 		
 		return result;
 	}
+	public BoardVo findByNoAndUserNo(Long no, Long userNo) {
+		BoardVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+				
+		try {
+			conn = getConnection();
+
+			String sql = "select no, title, contents from board where no = ? and user_no = ?";
+			pstmt = conn.prepareStatement(sql);
+				
+			pstmt.setLong(1, no);
+			pstmt.setLong(2, userNo);
+			
+			rs = pstmt.executeQuery();			
+			if(rs.next()) {
+				result = new BoardVo();
+				
+				result.setNo(rs.getLong(1));
+				result.setTitle(rs.getString(2));
+				result.setContents(rs.getString(3));
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 	
 	/*
 	 * 글 수정 눌렀을 때  
@@ -443,7 +486,7 @@ public class BoardRepository {
 	/*
 	 * delete 게시글  
 	 */
-	public boolean deleteBoard(Long no) {
+	public boolean deleteBoard(Long no, Long userNo) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -453,11 +496,12 @@ public class BoardRepository {
 			conn = getConnection();
 			
 			// 3. SQL 준비
-			String sql = "DELETE FROM board WHERE no = ? ";
+			String sql = "DELETE FROM board WHERE no = ? AND user_no = ?";
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. 바인딩
 			pstmt.setLong(1, no);
+			pstmt.setLong(2, userNo);
 			
 			// 5. SQL 실행
 			int count = pstmt.executeUpdate();

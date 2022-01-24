@@ -21,13 +21,13 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>${vo.title }</td>
+						<td>${boardVo.title }</td>
 					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${fn:replace(vo.contents, newline, "<br/>") }
+								${fn:replace(boardVo.contents, newline, "<br/>") }
 							</div>
 						</td>
 					</tr>
@@ -39,9 +39,9 @@
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board">글목록</a>
 						<c:if test="${not empty authUser }">
-							<a href="${pageContext.request.contextPath }/board?a=reply&no=${vo.no }">답글작성</a>
-							<c:if test="${authUser.no eq vo.userNo }">
-								<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${vo.no }">글수정</a>
+							<a href="${pageContext.request.contextPath }/board/reply/${boardVo.no }">답글작성</a>
+							<c:if test="${authUser.no eq boardVo.userNo }">
+								<a href="${pageContext.request.contextPath }/board/update/${boardVo.no }">글수정</a>
 							</c:if>						
 						</c:if>
 				</div>
