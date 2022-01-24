@@ -154,12 +154,14 @@ public class UserRepository {
 				String email = rs.getString(2);
 				String password = rs.getString(3);
 				String gender = rs.getString(4);
+//				Long no = rs.getLong(5);
 				
 				result = new UserVo();
 				result.setName(name);
 				result.setEmail(email);
 				result.setPassword(password);
 				result.setGender(gender);
+				result.setNo(no);
 			}
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
@@ -183,7 +185,7 @@ public class UserRepository {
 		return result;
 	}
 	
-	public boolean updateUser(UserVo vo) {
+	public boolean updateUser(UserVo userVo) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -194,7 +196,7 @@ public class UserRepository {
 			String sql = null;
 			
 			//3. SQL준비
-			if(vo.getPassword() == null) {
+			if(userVo.getPassword() == null && "".equals(userVo.getPassword())) {
 				sql = "update user set name=?, gender=? where no=?";
 			
 			}else {
@@ -204,15 +206,15 @@ public class UserRepository {
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. 바인딩(binding)
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getGender());
+			pstmt.setString(1, userVo.getName());
+			pstmt.setString(2,userVo.getGender());
 			
-			if(vo.getPassword() == null) {
-				pstmt.setLong(3, vo.getNo());
+			if(userVo.getPassword() == null) {
+				pstmt.setLong(3, userVo.getNo());
 			}
 			else {
-				pstmt.setString(3, vo.getPassword());
-				pstmt.setLong(4, vo.getNo());
+				pstmt.setString(3, userVo.getPassword());
+				pstmt.setLong(4, userVo.getNo());
 			}
 			
 			// 5. sql 실행, executeQuery는 rs, executeUpdatesms int로 반환
