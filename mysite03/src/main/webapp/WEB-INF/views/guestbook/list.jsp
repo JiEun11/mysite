@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/includes/header.jsp"/>
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
 				<form action="${pageContext.request.contextPath }/guestbook" method="post">
@@ -38,10 +38,10 @@
 						
 						<table>
 							<tr>
-								<td>[${count-status.index }]</td>
-								<td>[${vo.name }]</td>
-								<td>[${vo.regDate }]</td>
-								<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+								<td>${count-status.index }</td>
+								<td>${vo.name }</td>
+								<td>${vo.regDate }</td>
+								<td><a href="${pageContext.request.contextPath }/guestbook/delete/${vo.no }">삭제</a></td>
 							</tr>
 							<tr>
 								<td colspan=4>
@@ -55,8 +55,8 @@
 				</ul>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/includes/navigation.jsp" />
-		<jsp:include page="/WEB-INF/views/includes/footer.jsp" />
+		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>

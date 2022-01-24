@@ -27,7 +27,7 @@ public class UserController {
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String join(UserVo userVo) {
-		System.out.println(userVo);
+		//System.out.println(userVo);
 		userService.join(userVo);	//insert 작업 발생 
 		return "redirect:/user/joinsuccess";	//redirect, 여기파일에 있는 경로로 리다렉 해줘야함
 	}

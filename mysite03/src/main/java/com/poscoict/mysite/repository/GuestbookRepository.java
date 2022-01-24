@@ -119,7 +119,7 @@ public class GuestbookRepository {
 		return result;
 	}
 	
-	public boolean delete(int no, String password) {
+	public boolean delete(Long no, String password) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -133,7 +133,7 @@ public class GuestbookRepository {
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. 바인딩
-			pstmt.setInt(1, no);
+			pstmt.setLong(1, no);
 			pstmt.setString(2, password);
 			
 			// 5. SQL 실행
