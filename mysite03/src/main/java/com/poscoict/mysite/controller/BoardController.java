@@ -56,6 +56,7 @@ public class BoardController {
 		if(authUser == null) {
 			return "redirect:/board";
 		}
+		System.out.println("등록 후 : " + boardVo);
 		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
 		return "redirect:/board";
@@ -70,6 +71,7 @@ public class BoardController {
 			return "redirect:/board";
 		}
 		BoardVo boardVo = boardService.getContents(no);
+//		BoardVo boardVo = boardService.getContents(no,authUser.getNo());
 		model.addAttribute("boardVo", boardVo);
 		
 		return "board/view";
@@ -86,9 +88,12 @@ public class BoardController {
 		}
 		
 		BoardVo boardVo = boardService.getContents(no);
-//		System.out.println(boardVo.toString());
+		
+		System.out.println("reply 누른 후 : " + boardVo);
+		
 		boardVo.setOrderNo(boardVo.getOrderNo()+1);
 		boardVo.setDepth(boardVo.getDepth()+1);
+		System.out.println("gno & ono 업뎃 : " + boardVo);
 		
 		model.addAttribute("boardVo", boardVo);
 		

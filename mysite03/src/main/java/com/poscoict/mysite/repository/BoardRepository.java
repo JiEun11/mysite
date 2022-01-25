@@ -259,6 +259,7 @@ public class BoardRepository {
 	 */
 	public BoardVo findOne(Long no) {
 		BoardVo result = sqlSession.selectOne("board.findOne", no);
+		System.out.println(result);
 		return result;
 	}
 	
@@ -383,7 +384,7 @@ public class BoardRepository {
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("orderNo", orderNo);
 		map.put("groupNo", groupNo);
-		
+
 		return 1==sqlSession.update("board.updateOrderNo", map);
 //		boolean result = false;
 //		

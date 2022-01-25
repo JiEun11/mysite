@@ -22,10 +22,10 @@
 					<input type="hidden" name="kwd" value="${param.kwd }" />
 					<table class="tbl-ex">
 						<tr>
-							<th colspan="2">글쓰기</th>
+							<th colspan="2">글쓰기${boardVo.orderNo }</th>
 						</tr>
 						<tr>
-							<td class="label">제목</td>
+							<td class="label">제목${boardVo.depth }</td>
 							<td><input type="text" name="title" value=""></td>
 						</tr>
 						<tr>

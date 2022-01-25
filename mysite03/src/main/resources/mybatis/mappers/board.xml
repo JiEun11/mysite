@@ -46,9 +46,19 @@
 	</select>
 	
 	<insert id="insert" parameterType="boardvo">
-		<![CDATA[
-			INSERT INTO board VALUES(null,#{title }, #{contents },0,IFNULL((SELECT MAX(g_no)+1 FROM board b),1),1,0,now(),#{userNo })
-		]]>
+		<choose>
+			<when test="groupNo == null">
+				<![CDATA[
+					INSERT INTO board VALUES(null,#{title }, #{contents },0,IFNULL((SELECT MAX(g_no)+1 FROM board b),1),1,0,now(),#{userNo })
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				INSERT INTO board VALUES(null,#{title }, #{contents },0,#{groupNo },#{orderNo },#{depth },now(),#{userNo })
+				]]>
+			</otherwise>
+		</choose>
+		
 	</insert>
 
 	<update id="hitUp" parameterType="boardvo">
@@ -59,7 +69,7 @@
 	
 	<select id="findOne" parameterType="long" resultType="boardvo">
 	<![CDATA[
-		SELECT title, contents, g_no AS groupNo, o_no AS orderNo, depth, user_no as userNo, hit FROM board WHERE no = #{no }
+		SELECT no, title, contents, g_no AS groupNo, o_no AS orderNo, depth, user_no AS userNo, hit FROM board WHERE no = #{no }
 	]]>
 	</select>
 	
@@ -83,7 +93,7 @@
 	
 	<update id="updateOrderNo" parameterType="map">
 		<![CDATA[
-			update board set o_no = o_no + 1 where o_no > #{orderNo } AND g_no = #{groupNo }
+			UPDATE board set o_no = o_no + 1 where o_no > #{orderNo } AND g_no = #{groupNo }
 		]]>	
 	</update>
 </mapper>

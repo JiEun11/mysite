@@ -23,8 +23,11 @@ public class BoardService {
 	// 새 글, 답글 
 	public Boolean addContents(BoardVo vo) {
 		if(vo.getGroupNo() != null) {
+			System.out.println(vo);
 			boardRepository.updateOrderNo(vo.getOrderNo(), vo.getGroupNo());
-			
+			System.out.println(vo);
+//			vo.setOrderNo(vo.getOrderNo()+1);
+//			vo.setDepth(vo.getDepth()+1);
 		}
 		return boardRepository.insert(vo);
 	}
@@ -33,7 +36,7 @@ public class BoardService {
 	// 글보기 view
 	public BoardVo getContents(Long no) {
 		BoardVo boardVo = boardRepository.findOne(no);
-		
+		System.out.println(boardVo);
 		if(boardVo != null )
 			boardRepository.hitUp(boardVo);
 		
