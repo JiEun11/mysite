@@ -28,10 +28,12 @@ public class GuestbookController {
 	}
 	
 	// 확인버튼 눌렀을 때 (글 삽입)
-	@RequestMapping(value="", method=RequestMethod.POST)
+	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public String guestbook(GuestbookVo vo) {
+		System.out.println("guestbookvo insert 전 : " + vo);
 		guestbookService.addMessage(vo);	// insert 작업 발생 
 //		System.out.println(vo.toString());
+		System.out.println("guestbookvo insert 후 : " +vo);
 		return "redirect:/guestbook";		// 새로고침 시 insert 계속 안 되도록 redirect
 	}
 	

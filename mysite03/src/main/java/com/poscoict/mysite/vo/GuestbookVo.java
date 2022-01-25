@@ -1,16 +1,16 @@
 package com.poscoict.mysite.vo;
 
 public class GuestbookVo {
-	private int no;			// 게시판 글 번호
+	private Long no;			// 게시판 글 번호
 	private String name; 	// 사용자 이름
 	private String password; // 사용자 비번 
 	private String regDate; // 글 등록날짜
 	private String message; // 게시판 글 
 	
-	public int getNo() {
+	public Long getNo() {
 		return no;
 	}
-	public void setNo(int no) {
+	public void setNo(Long no) {
 		this.no = no;
 	}
 	public String getName() {
