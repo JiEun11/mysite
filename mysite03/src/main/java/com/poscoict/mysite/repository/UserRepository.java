@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import com.poscoict.mysite.exception.UserRepositoryException;
 import com.poscoict.mysite.vo.UserVo;
 
 @Repository
@@ -59,6 +60,7 @@ public class UserRepository {
 			
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
+			
 		} finally {
 			// 자원 정리
 			try {
@@ -79,7 +81,7 @@ public class UserRepository {
 		return result;
 	}
 	
-	public UserVo findByEmailAndPassword(String email, String password) {
+	public UserVo findByEmailAndPassword(String email, String password) throws UserRepositoryException {
 		UserVo result = null;
 		
 		Connection conn = null;
@@ -108,7 +110,8 @@ public class UserRepository {
 				result.setName(name);
 			}
 		} catch (SQLException e) {
-			System.out.println("error: " + e);
+//			System.out.println("error: " + e);
+			throw new UserRepositoryException(e.toString());
 		} finally {
 			// 자원 정리
 			try {
