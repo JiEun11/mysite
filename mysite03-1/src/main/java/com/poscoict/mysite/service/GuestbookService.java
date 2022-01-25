@@ -20,15 +20,15 @@ public class GuestbookService {
 		return guestbookRepository.findAll();
 	}
 	
-	public int deleteMessage(Long no, String password) {
+	public Boolean deleteMessage(Long no, String password) {
 		
-		return guestbookRepository.delete(no, password);
+		return guestbookRepository.delete(no, password) == 1 ;
 		
 	}
 	
-	public int addMessage(GuestbookVo vo) {
+	public Boolean addMessage(GuestbookVo vo) {
 				
-		return guestbookRepository.insert(vo); 
+		return guestbookRepository.insert(vo) == 1 ; 
 	}
 	
 }
