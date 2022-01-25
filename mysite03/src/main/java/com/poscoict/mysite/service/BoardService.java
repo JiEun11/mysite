@@ -91,6 +91,7 @@ public class BoardService {
 		
 		// 4. 리스트 가져오기 
 		List<BoardVo> list = boardRepository.findAll(pageVo.getCurrentPage(), pageVo.getBoardLimit(), pageVo.getTag(), pageVo.getKwd());
+//		List<BoardVo> list = boardRepository.findAll(pageVo);
 
 //		for(BoardVo vo : list) {
 //			System.out.println(vo.toString());

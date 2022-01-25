@@ -1,10 +1,5 @@
 package com.poscoict.mysite.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,23 +36,4 @@ public class GuestbookRepository {
 		return 1 == sqlSession.delete("guestbook.delete",map);
 	}
 	
-	/*
-	 * driver loading 
-	 */
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			//1. JDBC 드라이버 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			//2. 연결하기
-			String url = "jdbc:mysql://localhost:3306/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			
-		} catch (ClassNotFoundException e) {
-			System.out.println("Fail to load a driver.: " + e);
-		}
-		
-		return conn;
-	}
 }

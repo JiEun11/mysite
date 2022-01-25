@@ -15,9 +15,9 @@ public class PageVo {
 	public int getBoardLimit() {
 		return boardLimit;
 	}
-//	public void setBoardLimit(int boardLimit) {
-//		this.boardLimit = boardLimit;
-//	}
+	public void setBoardLimit(int boardLimit) {
+		this.boardLimit = boardLimit;
+	}
 
 	public Integer getPageLimit() {
 		return pageLimit;

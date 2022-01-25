@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	
+	<select id="boardTotalCnt" parameterType="map" resultType="int">
+		<choose>
+			<when test="kwd == null or '' == kwd or '' == tag or tag == null">
+				<![CDATA[
+					SELECT COUNT(*) FROM board
+				]]>	
+			</when>
+			<otherwise>
+				<![CDATA[
+					SELECT COUNT(*) FROM user a, board b WHERE a.no = b.user_no AND #{tag } LIKE '%${kwd}%'
+				]]>	
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAll" parameterType="map" resultType="boardvo">
+		<choose>
+			<when test="tag == null or '' == tag">
+				<![CDATA[
+					SELECT b.no, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
+					DATE_FORMAT(b.reg_date, "%Y/%m/%d %H:%i:%s") AS regDate,
+					a.no AS userNo
+					FROM user a, board b
+					WHERE a.no = b.user_no
+					ORDER BY b.g_no DESC, b.o_no ASC
+					LIMIT #{boardLimit *(currentPage -1)}, #{boardLimit };
+				]]>	
+			</when>
+			<otherwise>
+				<![CDATA[
+					SELECT b.no, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
+					DATE_FORMAT(b.reg_date, "%Y/%m/%d %H:%i:%s") AS regDate,
+					a.no AS userNo
+					FROM user a, board b
+					WHERE a.no = b.user_no AND #{tag } LIKE '%${kwd}%'
+					ORDER BY b.g_no DESC, b.o_no ASC
+					LIMIT #{boardLimit *(currentPage -1)}, #{boardLimit };
+				]]>	
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" parameterType="boardvo">
+		<![CDATA[
+			INSERT INTO board VALUES(null,#{title }, #{contents },0,IFNULL((SELECT MAX(g_no)+1 FROM board b),1),1,0,now(),#{userNo })
+		]]>
+	</insert>
+
+	<update id="hitUp" parameterType="boardvo">
+		<![CDATA[
+			UPDATE board SET hit = hit + 1 WHERE no=#{no }
+		]]>	
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="boardvo">
+	<![CDATA[
+		SELECT title, contents, g_no AS groupNo, o_no AS orderNo, depth, user_no as userNo, hit FROM board WHERE no = #{no }
+	]]>
+	</select>
+	
+	<select id="findByNoAndUserNo" parameterType="map" resultType="boardvo">
+	<![CDATA[
+		select no, title, contents from board where no = #{no } and user_no = #{userNo }
+	]]>
+	</select>
+	
+	<update id="updateBoard" parameterType="boardvo">
+		<![CDATA[
+			UPDATE board SET title=#{title }, contents=#{contents } WHERE no=#{no }
+		]]>	
+	</update>
+	
+	<delete id="deleteBoard" parameterType="map">
+		<![CDATA[
+			DELETE FROM board WHERE no = #{no } AND user_no = #{userNo }
+		]]>
+	</delete>
+	
+	<update id="updateOrderNo" parameterType="map">
+		<![CDATA[
+			update board set o_no = o_no + 1 where o_no > #{orderNo } AND g_no = #{groupNo }
+		]]>	
+	</update>
+</mapper>
