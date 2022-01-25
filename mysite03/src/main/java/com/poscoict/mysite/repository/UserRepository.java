@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.poscoict.mysite.exception.UserRepositoryException;
@@ -14,6 +18,11 @@ import com.poscoict.mysite.vo.UserVo;
 @Repository
 public class UserRepository {
 	
+	@Autowired
+	private DataSource dataSource;
+	
+	@Autowired
+	private SqlSession sqlSession;
 	/*
 	 * driver loading 
 	 */
@@ -39,10 +48,9 @@ public class UserRepository {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			//3. SQL준비
 			String sql = "INSERT INTO user VALUES(null, ?, ?, ?, ?, now());";
@@ -64,9 +72,7 @@ public class UserRepository {
 		} finally {
 			// 자원 정리
 			try {
-				if (rs != null) {
-					rs.close();
-				}
+			
 				if (pstmt != null) {
 					pstmt.close();
 				}
@@ -89,7 +95,7 @@ public class UserRepository {
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			//3. SQL준비
 			String sql = "select no,name from user where email=? and password=?";
@@ -141,7 +147,7 @@ public class UserRepository {
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			//3. SQL준비
 			String sql = "select name,email,password,gender from user where no=?";
@@ -190,12 +196,12 @@ public class UserRepository {
 	
 	public boolean updateUser(UserVo userVo) {
 		boolean result = false;
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
+				
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			String sql = null;
 			
 			//3. SQL준비
@@ -228,9 +234,7 @@ public class UserRepository {
 		} finally {
 			// 자원 정리
 			try {
-				if (rs != null) {
-					rs.close();
-				}
+			
 				if (pstmt != null) {
 					pstmt.close();
 				}
