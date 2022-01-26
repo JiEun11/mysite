@@ -10,8 +10,6 @@ public class BoardVo {
 	private Integer orderNo;
 	private Integer depth;
 	private String regDate;
-	
-//	private UserVo userVo; 객체 지향에서는 이렇게 하는게 맞음. orm hypernate
 	private Long userNo;	// fk 
 	private String userName;
 	

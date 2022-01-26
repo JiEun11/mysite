@@ -15,26 +15,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="get">
-					<select name="tag">
-					<c:choose>
-						<c:when test="${map.pageVo.tag eq 'name'}">
-							<option value="title">제목</option>
-							<option value="name" selected>작성자</option>
-							<option value="contents">내용</option>
-						</c:when>
-						<c:when test="${map.pageVo.tag eq 'contents'}">
-							<option value="title">제목</option>
-							<option value="name">작성자</option>
-							<option value="contents" selected>내용</option>
-						</c:when>
-						<c:otherwise>
-							<option value="title">제목</option>
-							<option value="name">작성자</option>
-							<option value="contents">내용</option>
-						</c:otherwise>
-					</c:choose>
-					</select>
-					<input type="text" id="kwd" name="kwd" value="${map.pageVo.kwd }">
+					<input type="text" id="kwd" name="kwd" value="${keyword }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -47,7 +28,7 @@
 						<th>&nbsp;</th>
 					</tr>				
 					<!--<c:set var="count" value="${fn:length(list) }" />-->
-					<c:set var="count" value="${map.pageVo.boardTotalCnt }"/>
+					<!--<c:set var="count" value="${map.pageVo.boardTotalCnt }"/> -->
 					<c:forEach items="${map.list }" var="vo" varStatus="status">
 					<tr>
 						<td>${count- status.index- (map.pageVo.currentPage -1)* map.pageVo.boardLimit }</td>

@@ -43,13 +43,13 @@ public class GuestbookRepository {
 				String message = rs.getString(3);
 				String date = rs.getString(4);
 				
-				GuestbookVo gbvo = new GuestbookVo();
-				gbvo.setNo(no);
-				gbvo.setName(name);
-				gbvo.setRegDate(date);
-				gbvo.setMessage(message);
+				GuestbookVo vo = new GuestbookVo();
+				vo.setNo(no);
+				vo.setName(name);
+				vo.setRegDate(date);
+				vo.setMessage(message);
 				
-				result.add(gbvo);
+				result.add(vo);
 			}
 		} catch (SQLException e) {
 			System.out.println("error: " +e );
