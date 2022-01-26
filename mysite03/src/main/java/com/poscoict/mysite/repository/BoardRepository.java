@@ -128,111 +128,119 @@ public class BoardRepository {
 	/*
 	 *  검색 & 페이징 적용 listAll() 구현 중 
 	 */
-	public List<BoardVo> findAll(int currentPage, int boardLimit, String tag, String kwd){
+	public List<BoardVo> findAll(PageVo pageVo){
 		
-		List<BoardVo> result = new ArrayList<>();
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = getConnection();
-			// 3. SQL준비
-			String sql = null;
-			if(tag == null || tag.isBlank()==true) {
-				sql = "SELECT b.no,"
-						+ "	b.title,"
-						+ " a.name,"
-						+ "	b.hit,"
-						+ " b.g_no,"
-						+ " b.o_no,"
-						+ " b.depth,"
-						+ " b.contents,"
-						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
-						+ " a.no"
-						+ "	FROM user a, board b"
-						+ " WHERE  a.no = b.user_no"
-						+ " ORDER BY b.g_no DESC, b.o_no ASC"
-						+ " LIMIT ?, ?";
-				
-				pstmt = conn.prepareStatement(sql);
-				
-				// 4. binding
-				pstmt.setInt(1, boardLimit * (currentPage-1));
-				pstmt.setInt(2, boardLimit);
-			}else {
-				sql = "SELECT b.no,"
-						+ "	b.title,"
-						+ " a.name,"
-						+ "	b.hit,"
-						+ " b.g_no,"
-						+ " b.o_no,"
-						+ " b.depth,"
-						+ " b.contents,"
-						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
-						+ " a.no"
-						+ "	FROM user a, board b"
-						+ " WHERE  a.no = b.user_no AND "+ tag +" LIKE '%" + kwd + "%'"
-						+ " ORDER BY b.g_no DESC, b.o_no ASC"
-						+ " LIMIT ?, ?";
-				
-				pstmt = conn.prepareStatement(sql);
-				
-				// 4. binding
-				pstmt.setInt(1, boardLimit * (currentPage-1));
-				pstmt.setInt(2, boardLimit);
-			}
-			
-			// 5. SQL 실행
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String userName = rs.getString(3);
-				int hit = rs.getInt(4);
-				int groupNo = rs.getInt(5);
-				int orderNo = rs.getInt(6);
-				int depth = rs.getInt(7);
-				String contents = rs.getString(8);
-				String date = rs.getString(9);
-				Long userNo = rs.getLong(10);
-				
-				BoardVo vo = new BoardVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setUserName(userName);
-				vo.setHit(hit);
-				vo.setGroupNo(groupNo);
-				vo.setOrderNo(orderNo);
-				vo.setDepth(depth);
-				vo.setContents(contents);				
-				vo.setRegDate(date);
-				vo.setUserNo(userNo);
-				
-				result.add(vo);
-			}
-		} catch (SQLException e) {
-			System.out.println("error: " +e );
-		} finally {
-			// 자원 정리
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("startPage", pageVo.getStartPage());
+		map.put("boardLimit", pageVo.getBoardLimit());
+		map.put("tag", pageVo.getTag());
+		map.put("kwd", pageVo.getKwd());
+		System.out.println("tag : "+ pageVo.getTag());
+		System.out.println("kwd : "+ pageVo.getKwd());
+		return sqlSession.selectList("board.findAll",map);
+//		List<BoardVo> result = new ArrayList<>();
+//		
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		
+//		try {
+//			
+//			conn = getConnection();
+//			// 3. SQL준비
+//			String sql = null;
+//			if(tag == null || tag.isBlank()==true) {
+//				sql = "SELECT b.no,"
+//						+ "	b.title,"
+//						+ " a.name,"
+//						+ "	b.hit,"
+//						+ " b.g_no,"
+//						+ " b.o_no,"
+//						+ " b.depth,"
+//						+ " b.contents,"
+//						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+//						+ " a.no"
+//						+ "	FROM user a, board b"
+//						+ " WHERE  a.no = b.user_no"
+//						+ " ORDER BY b.g_no DESC, b.o_no ASC"
+//						+ " LIMIT ?, ?";
+//				
+//				pstmt = conn.prepareStatement(sql);
+//				
+//				// 4. binding
+//				pstmt.setInt(1, startPage);
+//				pstmt.setInt(2, boardLimit);
+//			}else {
+//				sql = "SELECT b.no,"
+//						+ "	b.title,"
+//						+ " a.name,"
+//						+ "	b.hit,"
+//						+ " b.g_no,"
+//						+ " b.o_no,"
+//						+ " b.depth,"
+//						+ " b.contents,"
+//						+ "	DATE_FORMAT(b.reg_date, \"%Y/%m/%d %H:%i:%s\") AS reg_date,"
+//						+ " a.no"
+//						+ "	FROM user a, board b"
+//						+ " WHERE  a.no = b.user_no AND "+ tag +" LIKE '%" + kwd + "%'"
+//						+ " ORDER BY b.g_no DESC, b.o_no ASC"
+//						+ " LIMIT ?, ?";
+//				
+//				pstmt = conn.prepareStatement(sql);
+//				
+//				// 4. binding
+//				pstmt.setInt(1, startPage);
+//				pstmt.setInt(2, boardLimit);
+//			}
+//			
+//			// 5. SQL 실행
+//			rs = pstmt.executeQuery();
+//			
+//			while(rs.next()) {
+//				Long no = rs.getLong(1);
+//				String title = rs.getString(2);
+//				String userName = rs.getString(3);
+//				int hit = rs.getInt(4);
+//				int groupNo = rs.getInt(5);
+//				int orderNo = rs.getInt(6);
+//				int depth = rs.getInt(7);
+//				String contents = rs.getString(8);
+//				String date = rs.getString(9);
+//				Long userNo = rs.getLong(10);
+//				
+//				BoardVo vo = new BoardVo();
+//				vo.setNo(no);
+//				vo.setTitle(title);
+//				vo.setUserName(userName);
+//				vo.setHit(hit);
+//				vo.setGroupNo(groupNo);
+//				vo.setOrderNo(orderNo);
+//				vo.setDepth(depth);
+//				vo.setContents(contents);				
+//				vo.setRegDate(date);
+//				vo.setUserNo(userNo);
+//				
+//				result.add(vo);
+//			}
+//		} catch (SQLException e) {
+//			System.out.println("error: " +e );
+//		} finally {
+//			// 자원 정리
+//			try {
+//				if(rs != null) {
+//					rs.close();
+//				}
+//				if(pstmt != null) {
+//					pstmt.close();
+//				}
+//				if(conn != null) {
+//					conn.close();
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return result;
 	}
 	/*
 	 * 게시글 카운트 

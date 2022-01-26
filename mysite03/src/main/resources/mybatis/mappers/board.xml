@@ -10,9 +10,14 @@
 					SELECT COUNT(*) FROM board
 				]]>	
 			</when>
+			<when test="tag eq 'name'">
+				<![CDATA[
+					SELECT COUNT(*) FROM user a, board b WHERE a.no = b.user_no AND a.name LIKE '%${kwd}%'
+				]]>	
+			</when>
 			<otherwise>
 				<![CDATA[
-					SELECT COUNT(*) FROM user a, board b WHERE a.no = b.user_no AND #{tag } LIKE '%${kwd}%'
+					SELECT COUNT(*) FROM user a, board b WHERE a.no = b.user_no AND b.${tag } LIKE '%${kwd}%'
 				]]>	
 			</otherwise>
 		</choose>
@@ -20,26 +25,37 @@
 	
 	<select id="findAll" parameterType="map" resultType="boardvo">
 		<choose>
-			<when test="tag == null or '' == tag">
+			<when test="tag == null || '' == tag">
 				<![CDATA[
-					SELECT b.no, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
+					SELECT b.no, b.title, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
 					DATE_FORMAT(b.reg_date, "%Y/%m/%d %H:%i:%s") AS regDate,
 					a.no AS userNo
 					FROM user a, board b
 					WHERE a.no = b.user_no
 					ORDER BY b.g_no DESC, b.o_no ASC
-					LIMIT #{boardLimit *(currentPage -1)}, #{boardLimit };
+					LIMIT #{startPage }, #{boardLimit };
+				]]>	
+			</when>
+			<when test="tag eq 'name'">
+				<![CDATA[
+					SELECT b.no, b.title, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
+					DATE_FORMAT(b.reg_date, "%Y/%m/%d %H:%i:%s") AS regDate,
+					a.no AS userNo
+					FROM user a, board b
+					WHERE a.no = b.user_no AND a.name LIKE '%${kwd}%'
+					ORDER BY b.g_no DESC, b.o_no ASC
+					LIMIT #{startPage }, #{boardLimit }; 
 				]]>	
 			</when>
 			<otherwise>
 				<![CDATA[
-					SELECT b.no, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
+					SELECT b.no, b.title, a.name AS userName, b.hit, b.g_no AS groupNo, b.o_no AS orderNo, b.depth, b.contents,
 					DATE_FORMAT(b.reg_date, "%Y/%m/%d %H:%i:%s") AS regDate,
 					a.no AS userNo
 					FROM user a, board b
-					WHERE a.no = b.user_no AND #{tag } LIKE '%${kwd}%'
+					WHERE a.no = b.user_no AND b.${tag} LIKE '%${kwd}%'
 					ORDER BY b.g_no DESC, b.o_no ASC
-					LIMIT #{boardLimit *(currentPage -1)}, #{boardLimit };
+					LIMIT #{startPage }, #{boardLimit }; 
 				]]>	
 			</otherwise>
 		</choose>

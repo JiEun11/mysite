@@ -1,5 +1,6 @@
 package com.poscoict.mysite.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import com.poscoict.mysite.security.Auth;
 import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
+import com.poscoict.mysite.vo.PageVo;
 import com.poscoict.mysite.vo.UserVo;
 
 @Controller
@@ -28,13 +30,15 @@ public class BoardController {
 	// 홈페이지에서 게시판 눌렀을 때의 접근 
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public String list(@RequestParam(value="currentPage", required=true, defaultValue="1") Integer page,
-			@RequestParam(value="kwd", required=true, defaultValue="")String keyword,
+			@RequestParam(value="kwd", required=true, defaultValue="")String kwd,
 			@RequestParam(value="tag", required=true, defaultValue="")String tag,
 			Model model) {
 		
-		Map<String, Object> map = boardService.getContentsList(page, keyword, tag);
-		model.addAttribute("map", map);
-		
+		Map<String, Object> map = boardService.getContentsList(page, kwd, tag);
+		PageVo pageVo = (PageVo)map.get("pageVo");
+		List<BoardVo> list = (List<BoardVo>)map.get("list");
+		model.addAttribute("list", list);
+		model.addAttribute("pageVo",pageVo);
 		return "board/list";
 	}
 	
@@ -50,7 +54,7 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@AuthUser UserVo authUser, BoardVo boardVo) {
-		System.out.println("등록 후 : " + boardVo);
+		System.out.println("등록 후 : " + authUser);
 		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
 		return "redirect:/board";

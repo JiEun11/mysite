@@ -17,12 +17,12 @@
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="get">
 					<select name="tag">
 					<c:choose>
-						<c:when test="${map.pageVo.tag eq 'name'}">
+						<c:when test="${pageVo.tag eq 'name'}">
 							<option value="title">제목</option>
 							<option value="name" selected>작성자</option>
 							<option value="contents">내용</option>
 						</c:when>
-						<c:when test="${map.pageVo.tag eq 'contents'}">
+						<c:when test="${pageVo.tag eq 'contents'}">
 							<option value="title">제목</option>
 							<option value="name">작성자</option>
 							<option value="contents" selected>내용</option>
@@ -34,7 +34,7 @@
 						</c:otherwise>
 					</c:choose>
 					</select>
-					<input type="text" id="kwd" name="kwd" value="${map.pageVo.kwd }">
+					<input type="text" id="kwd" name="kwd" value="${pageVo.kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -43,14 +43,14 @@
 						<th>제목</th>
 						<th>글쓴이</th>
 						<th>조회수</th>
-						<th>작성일</th>
+						<th>작성일 ${pageVo.boardTotalCnt }</th>
 						<th>&nbsp;</th>
 					</tr>				
 					<!--<c:set var="count" value="${fn:length(list) }" />-->
-					<c:set var="count" value="${map.pageVo.boardTotalCnt }"/>
-					<c:forEach items="${map.list }" var="vo" varStatus="status">
+					<c:set var="count" value="${pageVo.boardTotalCnt }"/>
+					<c:forEach items="${list }" var="vo" varStatus="status">
 					<tr>
-						<td>${count- status.index- (map.pageVo.currentPage -1)* map.pageVo.boardLimit }</td>
+						<td>${count- status.index- (pageVo.currentPage -1)* pageVo.boardLimit }</td>
 						<!-- <td>${status.count }</td>-->
 						<c:choose>
 							<c:when test="${0 eq vo.depth}">
@@ -78,19 +78,19 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
-					<c:if test="${map.pageVo.currentPage ne 1 }">
+					<c:if test="${pageVo.currentPage ne 1 }">
 						<li><a href="">◀</a></li>
 					</c:if>
-						<c:forEach var="var" begin="1" end="${map.pageVo.pageTotalCnt }" step="1" varStatus="status">
+						<c:forEach var="var" begin="1" end="${pageVo.pageTotalCnt }" step="1" varStatus="status">
 							<c:choose>
-								<c:when test="${var == map.pageVo.currentPage }">
+								<c:when test="${var == pageVo.currentPage }">
 									<li class="selected">
 								</c:when>
 								<c:otherwise>
 									<li>
 								</c:otherwise>
 							</c:choose>
-						 		<a href="${pageContext.request.contextPath }/board?currentPage=${status.count }&kwd=${map.pageVo.kwd }&tag=${map.pageVo.tag }">${status.count }</a>
+						 		<a href="${pageContext.request.contextPath }/board?currentPage=${status.count }&kwd=${pageVo.kwd }&tag=${pageVo.tag }">${status.count }</a>
 							</li>
 						</c:forEach>
 						
@@ -100,7 +100,7 @@
 						<li>4</li>
 						<li>5</li>
 						-->
-						<c:if test="${map.pageVo.currentPage ne map.pageVo.pageTotalCnt }">
+						<c:if test="${pageVo.currentPage ne pageVo.pageTotalCnt }">
 						<li><a href="">▶</a></li>
 						</c:if>
 					</ul>

@@ -64,6 +64,7 @@ public class BoardService {
 	
 	// 글 리스트(찾기 결과)
 	public Map<String, Object> getContentsList(int currentPage, String keyword, String tag) {
+		
 		PageVo pageVo = new PageVo();
 		pageVo.setCurrentPage(currentPage);
 		pageVo.setKwd(keyword);
@@ -73,6 +74,9 @@ public class BoardService {
 		int boardTotalCount = boardRepository.boardTotalCnt(pageVo.getTag(), pageVo.getKwd());
 		int pageCount = (int)Math.ceil((double)boardTotalCount / pageVo.getPageLimit());
 		int blockCount = (int)Math.ceil((double)pageCount / pageVo.getBoardLimit());
+		
+		int startPage = pageVo.getBoardLimit() * (currentPage -1);
+		
 //		int currentBlock = (int)Math.ceil((double)currentPage / PAGE_SIZE);
 		
 		// 2. page 값 조건 설정 
@@ -90,10 +94,13 @@ public class BoardService {
 		
 		// 3. PageVo 객체에 값 세팅 
 		pageVo.setBoardTotalCnt(boardTotalCount);
+		System.out.println(pageVo.getBoardTotalCnt() + "total");
 		pageVo.setPageTotalCnt(pageCount);
+		pageVo.setStartPage(startPage);
 		
 		// 4. 리스트 가져오기 
-		List<BoardVo> list = boardRepository.findAll(pageVo.getCurrentPage(), pageVo.getBoardLimit(), pageVo.getTag(), pageVo.getKwd());
+		List<BoardVo> list = boardRepository.findAll(pageVo);
+		System.out.println(list);
 //		List<BoardVo> list = boardRepository.findAll(pageVo);
 
 //		for(BoardVo vo : list) {
@@ -103,7 +110,7 @@ public class BoardService {
 		Map<String,Object> map = new HashMap<String, Object>();
 		
 		map.put("list",list);
-		map.put("pageVo", pageVo);
+		map.put("pageVo",pageVo);
 		return map;
 	}
 	

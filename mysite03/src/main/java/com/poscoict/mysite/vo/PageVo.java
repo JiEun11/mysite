@@ -9,6 +9,7 @@ public class PageVo {
 	private Integer currentPage;		// 현재 페이지
 	private Integer nextPage;			// 다음 페이지 
 	private Integer prePage = -1;		// 화살표 표시를 위한 변수 
+	private Integer startPage;			// LIMIT startPage
 	private String tag;				// 찾고자 하는 태그 저장 변수 
 	private String kwd="";			// keyword 저장 변수 
 	
@@ -66,7 +67,12 @@ public class PageVo {
 	public void setPrePage(Integer prePage) {
 		this.prePage = prePage;
 	}
-
+	public Integer getStartPage() {
+		return startPage;
+	}
+	public void setStartPage(Integer startPage) {
+		this.startPage = startPage;
+	}
 	public String getTag() {
 		return tag;
 	}

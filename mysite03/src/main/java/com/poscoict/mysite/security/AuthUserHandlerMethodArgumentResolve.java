@@ -17,10 +17,10 @@ public class AuthUserHandlerMethodArgumentResolve implements HandlerMethodArgume
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		
 		if(!supportsParameter(parameter)) {
 			return WebArgumentResolver.UNRESOLVED;
 		}
+		System.out.println("2!!!!!!!!!!!!!!!!");
 		
 		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
 		// WAS에게 현재 request 객체를 return 해달라고 하는 코드 
@@ -34,7 +34,11 @@ public class AuthUserHandlerMethodArgumentResolve implements HandlerMethodArgume
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
+		System.out.println("1!!!!!!!!!!!!!!!!");
+
 		AuthUser authUser = parameter.getParameterAnnotation(AuthUser.class);
+		
+		System.out.println("2!!!!!!!!!!!!!!!!");
 		
 		// @AuthUser가 안 붙어있으면 
 		if(authUser == null) {
@@ -42,7 +46,7 @@ public class AuthUserHandlerMethodArgumentResolve implements HandlerMethodArgume
 		}
 		
 		// 파라미터 타입이 UserVo type인지 확인 
-		if(parameter.getParameterType().equals(UserVo.class)) {
+		if(parameter.getParameterType().equals(UserVo.class) == false) {
 			return false;
 		}
 		
