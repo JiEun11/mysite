@@ -27,12 +27,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
 		
 		
-		// 4. @Auth가 없다면 인증 필요없다는 소리니까 return true로 cont 실행 
+		// 4. @Auth가 없다면 인증 필요없다는 소리니까 return true로 cont 실행
+		// 4. Handler Method @Auth가 없다면 Type에 있는지 확인(과제)
 		if(auth == null) {
 			return true;
 		}
 		
 		// 5. @Auth가 적용되어 있기 때문에 인증(Authentication) 여부 확인
+		// 5. type과 method에 @Auth가 적용이 안 되어 있는 경우 
 		HttpSession session = request.getSession();
 		if(session == null) {
 			response.sendRedirect(request.getContextPath()+"/user/login");

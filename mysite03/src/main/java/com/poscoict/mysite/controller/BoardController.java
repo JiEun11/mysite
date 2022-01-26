@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscoict.mysite.security.Auth;
+import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
@@ -37,8 +38,8 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	@Auth
 	// 글쓰기 버튼 눌렀을 때 
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.GET)
 	public String write() {
 	
@@ -46,13 +47,9 @@ public class BoardController {
 	}
 	
 	// 글쓰기 등록 버튼 눌렀을 때 
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(HttpSession session, BoardVo boardVo) {
-		/* access controller */
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/board";
-		}
+	public String write(@AuthUser UserVo authUser, BoardVo boardVo) {
 		System.out.println("등록 후 : " + boardVo);
 		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
