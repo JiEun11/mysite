@@ -18,22 +18,28 @@ public class UserRepository {
 	private SqlSession sqlSession;
 	
 	public boolean insert(UserVo vo) {
-		int count = sqlSession.insert("user.insert", vo);	//" "안에 sql문의 id를 적음 
+		int count = sqlSession.insert("user.insert", vo);	//" "안에 sql문의 id를 적음
+		
 		return count == 1;
 		
 	}
 	
 	public UserVo findByEmailAndPassword(String email, String password) throws UserRepositoryException {
+	
 		
 		Map<String,Object> map  = new HashMap<>();
 		map.put("e", email);
 		map.put("p", password);
-		return sqlSession.selectOne("user.findByEmailAndPassword",map);
+		
+		UserVo vo = sqlSession.selectOne("user.findByEmailAndPassword",map);
+		
+		return vo;
 		
 	}
 
 
 	public UserVo findByNo(Long userNo) {
+		
 		UserVo result = sqlSession.selectOne("user.findByNo", userNo);
 		return result;
 		
