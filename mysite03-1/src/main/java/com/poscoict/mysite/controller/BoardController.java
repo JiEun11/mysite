@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
+import com.poscoict.web.util.WebUtil;
 
 @Controller
 @RequestMapping("/board")
@@ -25,9 +26,8 @@ public class BoardController {
 	
 	// 홈페이지에서 게시판 눌렀을 때의 접근 
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String list(@RequestParam(value="currentPage", required=true, defaultValue="1") Integer page,
+	public String list(@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 			@RequestParam(value="kwd", required=true, defaultValue="")String keyword,
-			@RequestParam(value="tag", required=true, defaultValue="")String tag,
 			Model model) {
 		
 		Map<String, Object> map = boardService.getContentsList(page, keyword);
@@ -50,7 +50,9 @@ public class BoardController {
 	
 	// 글쓰기 등록 버튼 눌렀을 때 
 	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(HttpSession session, BoardVo boardVo) {
+	public String write(HttpSession session, BoardVo boardVo,
+			@RequestParam(value="p", required=true, defaultValue="1") Integer page,
+			@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 		/* access controller */
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
@@ -58,7 +60,7 @@ public class BoardController {
 		}
 		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
-		return "redirect:/board";
+		return "redirect:/board?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
 	}
 	
 	@RequestMapping(value="/view/{no}", method=RequestMethod.GET)
@@ -96,14 +98,16 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/delete/{no}")
-	public String delete(HttpSession session, @PathVariable("no") Long no ) {
+	public String delete(HttpSession session, @PathVariable("no") Long no,
+					@RequestParam(value="p", required=true, defaultValue="1") Integer page,
+					@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 		/* access controller */
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/board";
 		}
 		boardService.deleteContents(no, authUser.getNo());
-		return "redirect:/board";
+		return "redirect:/board?p=" + page + "$kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
 	}
 	
 	@RequestMapping(value="/update/{no}", method=RequestMethod.GET)
@@ -122,16 +126,19 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(HttpSession session, BoardVo boardVo) {
+	public String update(HttpSession session, BoardVo boardVo,
+			@RequestParam(value="p", required=true, defaultValue="1") Integer page,
+			@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 		
 		/* access controller */
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/board";
 		}		
-
+		
+		boardVo.setUserNo(authUser.getNo());
 		boardService.updateContents(boardVo);
 		
-		return "redirect:/board";
+		return "redirect:/board/view/" + boardVo.getNo() + "?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
 	}
 }

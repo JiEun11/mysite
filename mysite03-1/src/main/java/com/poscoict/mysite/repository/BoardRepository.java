@@ -226,7 +226,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "select	no, title, contents, g_no as groupNo, o_no as orderNo, depth, user_no as userNo from board where no = ?";
+			String sql = "select no, title, contents, g_no as groupNo, o_no as orderNo, depth, user_no as userNo from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 				
 			pstmt.setLong(1, no);
