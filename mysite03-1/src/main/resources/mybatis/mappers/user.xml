@@ -28,7 +28,7 @@
 			update user set name=#{name }, gender=#{gender }
 		]]>
 		<if test="password != null and '' != password">
-			,		
+			,password=#{password }
 		</if>	
 		<![CDATA[
 			 where no=#{no }		
@@ -37,7 +37,7 @@
 	
 	<select id="findByNo" parameterType="long" resultType="uservo">
 		<![CDATA[
-			select name,email,password,gender from user where no=#{no }
+			select no,name,email,gender from user where no=#{no }
 		]]>
 	</select>
 	
