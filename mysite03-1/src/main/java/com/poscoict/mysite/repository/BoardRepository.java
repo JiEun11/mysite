@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.poscoict.mysite.vo.BoardVo;
 
 @Repository
@@ -20,133 +23,96 @@ public class BoardRepository {
 	private SqlSession sqlSession;
 	
 	public int insert(BoardVo boardVo) {
-		int result = 0;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			conn = getConnection();
-			
-			if(boardVo.getGroupNo() == null) {
-				String sql = "insert  into board values(null, ?, ?, 0, (select ifnull(max( g_no ), 0 ) + 1 from board a), 1, 0, now(), ?)";
-				pstmt = conn.prepareStatement(sql);
-
-				pstmt.setString(1, boardVo.getTitle());
-				pstmt.setString(2, boardVo.getContents());
-				pstmt.setLong(3, boardVo.getUserNo());
-			} else {
-				String sql = "insert  into board values(null, ?, ?, 0, ?, ?, ?, now(), ?)";
-				pstmt = conn.prepareStatement(sql);
-
-				pstmt.setString(1, boardVo.getTitle());
-				pstmt.setString(2, boardVo.getContents());
-				pstmt.setInt(3, boardVo.getGroupNo());
-				pstmt.setInt(4, boardVo.getOrderNo());
-				pstmt.setInt(5, boardVo.getDepth());
-				pstmt.setLong(6, boardVo.getUserNo());
-			}
-			
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}		
-
-		return result;
+		return sqlSession.insert("board.insert", boardVo);
 	}
 	
 	public List<BoardVo> findAllByPageAndKeword(String keyword, Integer page, Integer size) {
-		List<BoardVo> result = new ArrayList<>();
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-				
-		try {
-			conn = getConnection();
-
-			if(keyword == null || "".equals(keyword)) {
-				String sql = 
-					"     select a.no," + 
-				    "              a.title," + 
-					"              a.hit," + 
-				    "              date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate," +
-					"              a.depth," + 
-				    "              b.name as userName," +
-					"              a.user_no as userNo" + 
-				    "       from board a, user b" + 
-					"     where a.user_no = b.no" + 
-				    " order by g_no desc, o_no asc" + 
-					"       limit ?, ?";
-				pstmt = conn.prepareStatement(sql);
-			
-				pstmt.setInt(1, (page-1)*size);
-				pstmt.setInt(2, size);
-			} else {
-				String sql = 
-						"     select a.no," + 
-					    "              a.title," + 
-						"              a.hit," + 
-					    "              date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate," +
-						"              a.depth," + 
-					    "              b.name as userName," +
-						"              a.user_no as userNo" + 
-					    "       from board a, user b" + 
-						"     where a.user_no = b.no" +
-					    "        and (title like ? or contents like ?)" + 
-					    " order by g_no desc, o_no asc" + 
-						"       limit ?, ?";
-				pstmt = conn.prepareStatement(sql);
-			
-				pstmt.setString(1, "%" + keyword + "%");
-				pstmt.setString(2, "%" + keyword + "%");
-				pstmt.setInt(3, (page-1)*size);
-				pstmt.setInt(4, size);
-			}
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				BoardVo vo = new BoardVo();
-				
-				vo.setNo(rs.getLong(1));
-				vo.setTitle(rs.getString(2));
-				vo.setHit(rs.getInt(3));
-				vo.setRegDate(rs.getString(4));
-				vo.setDepth(rs.getInt(5));
-				vo.setUserName(rs.getString(6));
-				vo.setUserNo(rs.getLong(7));
-
-				result.add(vo);
-			}
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("keyword", keyword);
+		map.put("startIndex", (page-1)*size);
+		map.put("size", size);
+		return sqlSession.selectList("board.findAllByPageAndKeyword",map);
+//		List<BoardVo> result = new ArrayList<>();
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//				
+//		try {
+//			conn = getConnection();
+//
+//			if(keyword == null || "".equals(keyword)) {
+//				String sql = 
+//					"     select a.no," + 
+//				    "              a.title," + 
+//					"              a.hit," + 
+//				    "              date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate," +
+//					"              a.depth," + 
+//				    "              b.name as userName," +
+//					"              a.user_no as userNo" + 
+//				    "       from board a, user b" + 
+//					"     where a.user_no = b.no" + 
+//				    " order by g_no desc, o_no asc" + 
+//					"       limit ?, ?";
+//				pstmt = conn.prepareStatement(sql);
+//			
+//				pstmt.setInt(1, (page-1)*size);
+//				pstmt.setInt(2, size);
+//			} else {
+//				String sql = 
+//						"     select a.no," + 
+//					    "              a.title," + 
+//						"              a.hit," + 
+//					    "              date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate," +
+//						"              a.depth," + 
+//					    "              b.name as userName," +
+//						"              a.user_no as userNo" + 
+//					    "       from board a, user b" + 
+//						"     where a.user_no = b.no" +
+//					    "        and (title like ? or contents like ?)" + 
+//					    " order by g_no desc, o_no asc" + 
+//						"       limit ?, ?";
+//				pstmt = conn.prepareStatement(sql);
+//			
+//				pstmt.setString(1, "%" + keyword + "%");
+//				pstmt.setString(2, "%" + keyword + "%");
+//				pstmt.setInt(3, (page-1)*size);
+//				pstmt.setInt(4, size);
+//			}
+//			
+//			rs = pstmt.executeQuery();
+//			
+//			while(rs.next()) {
+//				BoardVo vo = new BoardVo();
+//				
+//				vo.setNo(rs.getLong(1));
+//				vo.setTitle(rs.getString(2));
+//				vo.setHit(rs.getInt(3));
+//				vo.setRegDate(rs.getString(4));
+//				vo.setDepth(rs.getInt(5));
+//				vo.setUserName(rs.getString(6));
+//				vo.setUserNo(rs.getLong(7));
+//
+//				result.add(vo);
+//			}
+//		} catch (SQLException e) {
+//			System.out.println("error:" + e);
+//		} finally {
+//			try {
+//				if(rs != null) {
+//					rs.close();
+//				}
+//				if(pstmt != null) {
+//					pstmt.close();
+//				}
+//				if(conn != null) {
+//					conn.close();
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return result;
 	}
 
 	public int update(BoardVo boardVo) {
@@ -374,7 +340,7 @@ public class BoardRepository {
 	}
 	
 	public int getTotalCount(String keyword) {
-		return sqlSession.selectOne("board.getTotalCount", keyword);
+		return sqlSession.selectOne("board.totalCount", keyword);
 	}
 	
 	private Connection getConnection() throws SQLException {
