@@ -9,6 +9,7 @@ public class MainController {
 	@RequestMapping({"", "/main"})
 	public String index() {
 		// return "/WEB-INF/views/main/index.jsp";
+		System.out.println("main cont start ");
 		return "main/index";
 	}
 }
