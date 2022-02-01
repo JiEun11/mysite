@@ -9,7 +9,7 @@
 <body>
 	<h1>예기치 않은 오류(Internal Server Error 500) </h1>
 	<p>
-		죄송합니다. 오류가 발생하였습니다.
+		죄송합니다. 오류가 발생하였습니다.  (mysite03-1)
 	</p>
 	
 </body>

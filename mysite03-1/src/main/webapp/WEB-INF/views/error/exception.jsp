@@ -7,7 +7,7 @@
 <title>exception jsp</title>
 </head>
 <body>
-	<h1>Exception Occurs</h1>
+	<h1>Exception Occurs (mysite03-1)</h1>
 	<p style="color:red">
 		${exception }
 	</p>
