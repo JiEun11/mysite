@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscoict.mysite.security.Auth;
+import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
@@ -52,14 +53,14 @@ public class BoardController {
 	// 글쓰기 등록 버튼 눌렀을 때 
 	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(HttpSession session, BoardVo boardVo,
+	public String write(@AuthUser UserVo authUser, BoardVo boardVo,
 			@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 			@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
-		/* access controller */
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/board";
-		}
+//		/* access controller */
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {
+//			return "redirect:/board";
+//		}
 		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
 		return "redirect:/board?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
@@ -67,7 +68,7 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping(value="/view/{no}", method=RequestMethod.GET)
-	public String view(HttpSession session, @PathVariable("no") Long no, Model model) {
+	public String view(@PathVariable("no") Long no, Model model) {
 
 //		/* access controller */
 //		UserVo authUser = (UserVo)session.getAttribute("authUser");
