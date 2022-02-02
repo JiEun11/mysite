@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.poscoict.mysite.security.Auth;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
@@ -36,18 +37,20 @@ public class BoardController {
 	}
 	
 	// 글쓰기 버튼 눌렀을 때 
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.GET)
-	public String write(HttpSession session) {
+	public String write() {
 		
-		/* access controller */
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/board";
-		}
+//		/* access controller */ auth annotation을 사용함으로써 없앨 수 있음 
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {
+//			return "redirect:/board";
+//		}
 		return "board/write";
 	}
 	
 	// 글쓰기 등록 버튼 눌렀을 때 
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(HttpSession session, BoardVo boardVo,
 			@RequestParam(value="p", required=true, defaultValue="1") Integer page,
@@ -62,14 +65,15 @@ public class BoardController {
 		return "redirect:/board?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
 	}
 	
+	@Auth
 	@RequestMapping(value="/view/{no}", method=RequestMethod.GET)
 	public String view(HttpSession session, @PathVariable("no") Long no, Model model) {
-		/* access controller */
-		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/board";
-		}
+
+//		/* access controller */
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {
+//			return "redirect:/board";
+//		}
 		BoardVo boardVo = boardService.getContents(no);
 		model.addAttribute("boardVo", boardVo);
 		
@@ -106,7 +110,7 @@ public class BoardController {
 			return "redirect:/board";
 		}
 		boardService.deleteContents(no, authUser.getNo());
-		return "redirect:/board?p=" + page + "$kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
+		return "redirect:/board?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");
 	}
 	
 	@RequestMapping(value="/update/{no}", method=RequestMethod.GET)
