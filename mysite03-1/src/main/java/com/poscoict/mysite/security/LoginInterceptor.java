@@ -24,7 +24,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		UserVo authUser = userService.getUser(email, password);
 		System.out.println(email + ", " + password );
 		
-		if(authUser == null) {
+		if(authUser == null) { //로그인 틀렸다면 다시 로그인 해라 
 			request.setAttribute("result","fail");
 			request.setAttribute("email", email);
 			request.getRequestDispatcher("/WEB-INF/views/user/login.jsp").forward(request, response);
@@ -33,7 +33,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}
 			
 		HttpSession session = request.getSession(true);	//없으면 생성 
-		session.setAttribute("authUser", authUser);
+		session.setAttribute("authUser", authUser);		//filter로 빠져야하지만 지금은 해줌
 		response.sendRedirect(request.getContextPath());
 		
 		return false;

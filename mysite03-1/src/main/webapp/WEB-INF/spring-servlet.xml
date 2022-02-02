@@ -24,11 +24,16 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
-	<!-- interceptors -->
+	<!-- Interceptors -->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth" />
 			<bean class="com.poscoict.mysite.security.LoginInterceptor" />
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/user/logout" />
+			<bean class="com.poscoict.mysite.security.LogoutInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
