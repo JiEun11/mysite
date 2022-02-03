@@ -6,17 +6,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.poscoict.mysite.security.Auth;
 
-//@Auth(role="ADMIN")
+@Auth(role="ADMIN")
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
 	
 	@RequestMapping("")
 	public String main() {
 		return "admin/main";
 	}
-	
 	
 	@RequestMapping("/board")
 	public String board() {
