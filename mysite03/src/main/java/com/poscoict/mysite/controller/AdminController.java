@@ -31,7 +31,6 @@ public class AdminController {
 	@RequestMapping("")
 	public String main(Model model) {
 		SiteVo siteVo = siteService.getSite();
-		System.out.println("controller main siteVo " + siteVo.toString());
 		model.addAttribute("siteVo", siteVo);
 		return "admin/main";
 	}
@@ -41,13 +40,11 @@ public class AdminController {
 		
 		if(multipartFile.isEmpty()) {
 			System.out.println("file is empty");
-		}
-		
-		System.out.println("controller update siteVo " + siteVo.toString());
-		
+		}		
 		String profile = uploadService.restore(multipartFile);
 		siteVo.setProfile(profile);
 		
+		System.out.println("after update siteVo " + siteVo.toString());
 		siteService.updateSite(siteVo);
 		servletContext.setAttribute("siteVo", siteVo);
 		
