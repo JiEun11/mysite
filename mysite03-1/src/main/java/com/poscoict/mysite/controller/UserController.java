@@ -1,7 +1,5 @@
 package com.poscoict.mysite.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.poscoict.mysite.security.Auth;
+import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.UserService;
 import com.poscoict.mysite.vo.UserVo;
 
@@ -44,12 +43,12 @@ public class UserController {
 	
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
-	public String update(HttpSession session, Model model) {
-		// 1. Access Controller
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {	//login도 안 하고 url로 비정상 접근한 경우 
-			return "redirect:/";
-		}
+	public String update(@AuthUser UserVo authUser, Model model) {
+//		// 1. Access Controller
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {	//login도 안 하고 url로 비정상 접근한 경우 
+//			return "redirect:/";
+//		}
 		
 		Long userNo = authUser.getNo();
 		UserVo userVo = userService.getUser(userNo);	//update쪽으로 넘겨서 값들 쓰려고
@@ -59,12 +58,12 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(HttpSession session, UserVo userVo) {
-		// 1. Access Controller
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {	//login도 안 하고 url로 비정상 접근한 경우 
-			return "redirect:/";
-		}
+	public String update(@AuthUser UserVo authUser, UserVo userVo) {
+//		// 1. Access Controller
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {	//login도 안 하고 url로 비정상 접근한 경우 
+//			return "redirect:/";
+//		}
 		userVo.setNo(authUser.getNo());
 		userService.updateUser(userVo);
 		System.out.println(userVo);
