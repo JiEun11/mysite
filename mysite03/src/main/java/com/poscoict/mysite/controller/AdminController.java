@@ -1,14 +1,17 @@
 package com.poscoict.mysite.controller;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.poscoict.mysite.service.SiteService;
+import com.poscoict.mysite.service.UploadService;
 import com.poscoict.mysite.vo.SiteVo;
 
 //@Auth(role="ADMIN")
@@ -19,6 +22,12 @@ public class AdminController {
 	@Autowired
 	private SiteService siteService;
 	
+	@Autowired
+	private UploadService uploadService;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
 	@RequestMapping("")
 	public String main(Model model) {
 		SiteVo siteVo = siteService.getSite();
@@ -28,9 +37,19 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/main/update", method=RequestMethod.POST)
-	public String update(SiteVo siteVo ) {
+	public String update(SiteVo siteVo, @RequestParam(value="file1")MultipartFile multipartFile ) {
+		
+		if(multipartFile.isEmpty()) {
+			System.out.println("file is empty");
+		}
+		
 		System.out.println("controller update siteVo " + siteVo.toString());
+		
+		String profile = uploadService.restore(multipartFile);
+		siteVo.setProfile(profile);
+		
 		siteService.updateSite(siteVo);
+		servletContext.setAttribute("siteVo", siteVo);
 		
 		return "redirect:/admin";
 	}
