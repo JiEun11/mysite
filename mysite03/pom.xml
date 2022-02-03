@@ -51,12 +51,18 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<!-- MySQL Connector -->
+		<!-- mariadb -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.7.4</version>
+		</dependency>
+		<!--  MySQL Connector 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.17</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- MyBatis -->
 		<dependency>
