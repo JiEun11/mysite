@@ -42,7 +42,7 @@
 						<form:errors path="email" />
 					</p>	
 					
-					<label class="block-label">패스워드</label>
+					<label class="block-label"><spring:message code="user.join.label.password" /></label>
 					<form:password path="password" />
 					<p style="text-align:left; padding-left:0; color:#f00">
 						<form:errors path="password" />
