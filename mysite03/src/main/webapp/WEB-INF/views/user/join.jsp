@@ -22,7 +22,7 @@
 					<p style="text-align: left; padding-left:0; color:#f00">
 					<spring:hasBindErrors name="userVo">
 						<c:if test="${errors.hasFieldErrors('name') }">
-							<strong>${errors.getFieldError( 'name' ).defaultMessage }</strong>
+							<spring:message code="${errors.getFieldError('name').codes[0] }" />
 						</c:if>
 					</spring:hasBindErrors>
 					</p>
