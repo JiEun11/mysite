@@ -23,7 +23,7 @@ public class SiteVo {
 	public String getWelcome() {
 		return welcome;
 	}
-	public void setWelcomeMessage(String welcome) {
+	public void setWelcome(String welcome) {
 		this.welcome = welcome;
 	}
 	public String getProfile() {
@@ -38,6 +38,15 @@ public class SiteVo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	@Override
+	public String toString() {
+		return "SiteVo [no=" + no + ", title=" + title + ", welcome=" + welcome + ", profile=" + profile
+				+ ", description=" + description + "]";
+	}
+	
+	
+	
 	
 	
 }
