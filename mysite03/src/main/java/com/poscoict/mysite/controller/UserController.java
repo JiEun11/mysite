@@ -1,10 +1,13 @@
 package com.poscoict.mysite.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,9 +29,21 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(UserVo userVo) {
+	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result, Model model) {
 		//System.out.println(userVo);
-		userService.join(userVo);	//insert 작업 발생 
+		
+		if(result.hasErrors()) {
+			// 여기에 들어왔다는 건 result 체크가 유효하지 않다는 뜻
+//			List<ObjectError> list = result.getAllErrors();		//error있는 애들 다 끄집어 내기 
+//			for(ObjectError error :list) {
+//				System.out.println(error);
+//			}
+//			model.addAttribute("userVo", userVo);		// name을 쓸 수 있게 값을 넘김
+			model.addAllAttributes(result.getModel());	// result 결과를 가지고다시 join으로 감
+			return "user/join";	//forwarding 시킴 
+		}
+		
+		userService.join(vo);	//insert 작업 발생 
 		return "redirect:/user/joinsuccess";	//redirect, 여기파일에 있는 경로로 리다렉 해줘야함
 	}
 	
