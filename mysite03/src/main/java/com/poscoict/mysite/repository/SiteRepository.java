@@ -18,9 +18,9 @@ public class SiteRepository {
 	}
 	
 	
-	public boolean updateSiteInfo(SiteVo siteVo) {
+	public int updateSiteInfo(SiteVo siteVo) {
 		int count = sqlSession.update("site.update", siteVo);
-		return count == 1;
+		return count;
 	}
 	
 }

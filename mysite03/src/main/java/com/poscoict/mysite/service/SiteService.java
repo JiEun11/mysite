@@ -16,7 +16,7 @@ public class SiteService {
 		return siteRepository.find();
 	}
 	
-	public void updateSite(SiteVo siteVo) {
-		siteRepository.updateSiteInfo(siteVo);
+	public boolean updateSite(SiteVo siteVo) {
+		return siteRepository.updateSiteInfo(siteVo) == 1 ;
 	}
 }
