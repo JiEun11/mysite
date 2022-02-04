@@ -15,7 +15,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" style="width:200px " src="${pageContext.request.contextPath }${siteVo.profile }">
+					<img id="profile" src="${pageContext.request.contextPath }${siteVo.profile }" style='width:200px'>
 					<h2>${siteVo.welcome }</h2>
 					<p>
 						${siteVo.description }

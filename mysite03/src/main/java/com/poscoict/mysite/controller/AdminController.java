@@ -38,10 +38,7 @@ public class AdminController {
 	
 	@RequestMapping(value="/main/update", method=RequestMethod.POST)
 	public String update(SiteVo siteVo, @RequestParam(value="file1")MultipartFile multipartFile ) {
-		
-		if(multipartFile.isEmpty()) {
-			System.out.println("file is empty");
-		}		
+	
 		String profile = uploadService.restore(multipartFile);
 		siteVo.setProfile(profile);
 		

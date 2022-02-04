@@ -19,7 +19,7 @@ public class SiteInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		
 		// 1. ServletContext에 있는 site 값 가져오기 
-		SiteVo siteVo = (SiteVo) request.getServletContext().getAttribute("site");
+		SiteVo siteVo = (SiteVo) request.getServletContext().getAttribute("siteVo");
 		
 		// 2. site값이 저장 안 되어 있는 상태, 즉 처음 admin페이지에 접속했을 때라면 값 넣기 
 		if(siteVo == null) {
