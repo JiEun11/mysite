@@ -6,11 +6,11 @@
 	<display-name>mysite04</display-name>
 
 	<context-param>
-		<param-name>contextClass </param-name>
+		<param-name>contextClass</param-name>
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
 	<context-param>
-		<param-name> contextConfigLocation </param-name>
+		<param-name>contextConfigLocation</param-name>
 		<param-value>com.poscoict.mysite.config.AppConfig</param-value>
 	</context-param>
 
@@ -45,7 +45,7 @@
 
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring-servlet.xml</param-value>
+			<param-value>com.poscoict.mysite.config.WebConfig</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>

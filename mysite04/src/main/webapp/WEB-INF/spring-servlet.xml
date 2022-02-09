@@ -9,8 +9,7 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-	<!-- auto proxy -->
-	<aop:aspectj-autoproxy />
+
 
 	<!-- Message Convertor, Handler Mapping, Validator 설정 및 생성 -->
 	<mvc:annotation-driven>
@@ -19,20 +18,6 @@
 				class="com.poscoict.mysite.security.AuthUserHandlerMethodArgumentResolve" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
-
-	<!-- Servlet Container(tomcat)의 DefaultServlet 위임(delegate) Hadler -->
-	<mvc:default-servlet-handler />
-
-	<!-- 멀티파트 리졸버 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 최대업로드 가능한 바이트크기 -->
-		<property name="maxUploadSize" value="52428800" />
-		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
-		<!-- property name="maxInMemorySize" value="52428800" / -->
-		<!-- defaultEncoding -->
-		<property name="defaultEncoding" value="utf-8" />
-	</bean>
 
 	<!-- Interceptors -->
 	<mvc:interceptors>
@@ -53,9 +38,9 @@
 			<mvc:exclude-mapping path="/assets/*" />
 			<bean class="com.poscoict.mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
-		
+
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
+			<mvc:mapping path="/**" />
 			<bean class="com.poscoict.mysite.interceptor.SiteInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -64,15 +49,16 @@
 	<mvc:resources mapping="/images/**"
 		location="file:/Users/bella/posco/upload-images/" />
 
-	<!-- ViewResolver -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
+	<!-- 멀티파트 리졸버 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대업로드 가능한 바이트크기 -->
+		<property name="maxUploadSize" value="52428800" />
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
+		<!-- property name="maxInMemorySize" value="52428800" / -->
+		<!-- defaultEncoding -->
+		<property name="defaultEncoding" value="utf-8" />
 	</bean>
-
 
 
 	<!-- 6. MessageSource -->
@@ -86,7 +72,6 @@
 	</bean>
 
 	<context:annotation-config />
-	<context:component-scan
-		base-package="com.poscoict.mysite.controller, com.poscoict.mysite.exception" />
+
 
 </beans>
