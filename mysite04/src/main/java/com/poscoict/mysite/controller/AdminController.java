@@ -40,14 +40,14 @@ public class AdminController {
 	public String update(SiteVo siteVo, @RequestParam(value="file1")MultipartFile multipartFile ) {
 	
 		String profile = uploadService.restore(multipartFile);
-		siteVo.setProfile(profile);
+		
 		
 		System.out.println("after update siteVo " + siteVo.toString());
 		
 		if(profile != null) {
-			siteService.updateSite(siteVo);
+			siteVo.setProfile(profile);
 		}
-//		siteService.updateSite(siteVo);
+		siteService.updateSite(siteVo);
 		servletContext.setAttribute("siteVo", siteVo);
 		
 		return "redirect:/admin";
