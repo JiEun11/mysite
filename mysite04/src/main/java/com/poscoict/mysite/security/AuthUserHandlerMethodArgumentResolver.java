@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.poscoict.mysite.vo.UserVo;
 
-public class AuthUserHandlerMethodArgumentResolve implements HandlerMethodArgumentResolver {
+public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
