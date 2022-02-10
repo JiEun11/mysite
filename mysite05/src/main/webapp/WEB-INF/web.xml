@@ -13,11 +13,11 @@
 		<param-value>com.poscoict.mysite.config.AppConfig</param-value>
 	</context-param>  -->
 
-	<!-- Context Load Listener -->
+	<!-- Context Load Listener 
 	<listener>
 		<listener-class> org.springframework.web.context.ContextLoaderListener
 		</listener-class>
-	</listener>
+	</listener> -->
 
 	<!-- Encoding 
 	<filter>
@@ -58,14 +58,14 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping> -->
 
-	<!-- 공통 에러페이지 -->
+	<!-- 공통 에러페이지 
 
 	<error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/views/error/404.jsp</location>
-	</error-page>
+	</error-page>-->
   
-  
+<!--   
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -73,5 +73,5 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>  -->
 </web-app>

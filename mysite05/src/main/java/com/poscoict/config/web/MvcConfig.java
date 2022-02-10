@@ -29,10 +29,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
 	
 	// DefaultServlet Handler 
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable(); //defaultServlet handler를 enable 하겠다
-	}
+//	@Override
+//	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+//		configurer.enable(); //defaultServlet handler를 enable 하겠다
+//	}
 	
 	
 }
