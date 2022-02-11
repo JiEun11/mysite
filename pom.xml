@@ -60,5 +60,6 @@
 		<module>mysite03-1</module>
 		<module>mysite04</module>
 		<module>mysite05</module>
+		<module>mysite06</module>
 	</modules>
 </project>

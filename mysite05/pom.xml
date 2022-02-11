@@ -63,7 +63,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<!-- mariadb -->
+		<!-- mariadb JDBC Driver -->
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
