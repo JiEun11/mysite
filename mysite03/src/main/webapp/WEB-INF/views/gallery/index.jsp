@@ -49,6 +49,7 @@ $(function(){
 		<div id="content">
 			<div id="gallery">
 				<div>
+					<h1><span class="gallery-logo" style="background-image:url('${pageContext.request.contextPath }/assets/images/gallery.png'"></span></h1>
 					<h1>갤러리</h1>
 					<a href="" id="upload-image">이미지 올리기</a>
 				</div>
@@ -208,17 +209,7 @@ $(function(){
 								class="del-button"
 								title="삭제">삭제</a>
 						</li>
-						
-						<li>
-							<a	href="${pageContext.request.contextPath }/assets/gallery-examples/im15.jpg"
-								data-lightbox="gallery"
-								class="image"
-								style="background-image:url('${pageContext.request.contextPath }/assets/gallery-examples/im15.jpg')">&nbsp;</a>
-								
-							<a	href="${pageContext.request.contextPath }/gallery/delete/15"
-								class="del-button"
-								title="삭제">삭제</a>
-						</li>																																				
+																																									
 				</ul>	
 			</div>
 
