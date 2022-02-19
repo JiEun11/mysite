@@ -2,8 +2,24 @@
 @import "mysite.css";
 
 #gallery			{ margin:20px auto;	width:540px; }
-#gallery ul			{ width: 100%; }
+#gallery ul { 
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
 
+#gallery li a.image{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100px;
+	height: 100px;
+	margin: 3px;
+	background-size: 100px;
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
 
 /* 이미지 업로드 팝업 레이어 */ 
 #dialog-upload-form 					{ text-align: left; }
