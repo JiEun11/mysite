@@ -54,15 +54,18 @@ $(function(){
 					<a href="" id="upload-image">이미지 올리기</a>
 				</div>
 				<ul>
+					<c:forEach items="${list }" var="vo" varStatus="status">
 						<li>
-							<a	href="${pageContext.request.contextPath }/assets/gallery-examples/im1.jpg"
+							<a	href="${pageContext.request.contextPath }${vo.url }"
 								data-lightbox="gallery"
 								class="image"
-								style="background-image:url('${pageContext.request.contextPath }/assets/gallery-examples/im1.jpg')">&nbsp;</a>
+								style="background-image:url('${pageContext.request.contextPath }${vo.url }')">&nbsp;</a>
 								
-							<a	href="${pageContext.request.contextPath }/gallery/delete/1"
+							<a	href="${pageContext.request.contextPath }/gallery/delete/${vo.no }"
 								class="del-button" title="삭제"><span class="blind">삭제</span></a>
 						</li>
+					</c:forEach>
+						
 						
 						
 						<li>
