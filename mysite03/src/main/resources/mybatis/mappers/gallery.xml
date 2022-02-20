@@ -13,5 +13,10 @@
 			DELETE FROM gallery WHERE no = #{no }
 		]]>
 	</delete>
-	
+
+	<insert id="insertImage" parameterType="galleryvo">
+		<![CDATA[
+			INSERT INTO gallery VALUES(null, #{url }, #{comments })
+		]]>
+	</insert>
 </mapper>

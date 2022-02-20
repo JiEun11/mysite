@@ -20,10 +20,10 @@ import com.poscoict.mysite.vo.GalleryVo;
 public class GalleryController {
 	
 	@Autowired
-	private UploadService fileUploadService;
+	private GalleryService galleryService;
 	
 	@Autowired
-	private GalleryService galleryService;
+	private UploadService fileUploadService;
 	
 	@RequestMapping("")
 	public String index(Model model) {
@@ -42,8 +42,16 @@ public class GalleryController {
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public String upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam(value="comments", required=true, defaultValue="") String comments) {
-//		galleryService.saveImage(vo);
+		
+		GalleryVo galleryVo = new GalleryVo();
+		String url = fileUploadService.restore(multipartFile);
+		
+		galleryVo.setUrl(url);
+		System.out.println("url : " + url);
+		galleryVo.setComments(comments);
 		System.out.println("comments : " + comments);
+		galleryService.saveImage(galleryVo);
+		
 		return "redirect:/gallery";
 	}
 }

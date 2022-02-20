@@ -19,7 +19,10 @@ public class GalleryRepository {
 	}
 
 	public int deleteImage(Long no) {
-		System.out.println("Repository gallery no : " + no);
 		return sqlSession.delete("gallery.deleteImage",no);
+	}
+
+	public int insertImage(GalleryVo galleryVo) {
+		return sqlSession.insert("gallery.insertImage", galleryVo);
 	}
 }

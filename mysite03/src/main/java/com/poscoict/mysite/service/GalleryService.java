@@ -19,8 +19,12 @@ public class GalleryService {
 	}
 
 	public Boolean removeImg(Long no) {
-		System.out.println("Service gallery no : " + no);
 		return galleryRepository.deleteImage(no)==1;		
+	}
+
+	public Boolean saveImage(GalleryVo galleryVo) {
+		return galleryRepository.insertImage(galleryVo)==1;
+		
 	}
 
 }
