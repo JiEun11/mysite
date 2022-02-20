@@ -48,8 +48,8 @@ $(function(){
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="gallery">
-				<div>
-					<h1><span class="gallery-logo" style="background-image:url('${pageContext.request.contextPath }/assets/images/gallery.png'"></span></h1>
+				<div class="gallery-header">
+					<span class="gallery-logo"></span>
 					<h1>갤러리</h1>
 					<a href="" id="upload-image">이미지 올리기</a>
 				</div>
@@ -61,8 +61,7 @@ $(function(){
 								style="background-image:url('${pageContext.request.contextPath }/assets/gallery-examples/im1.jpg')">&nbsp;</a>
 								
 							<a	href="${pageContext.request.contextPath }/gallery/delete/1"
-								class="del-button"
-								title="삭제">삭제</a>
+								class="del-button" title="삭제"><span class="blind">삭제</span></a>
 						</li>
 						
 						
@@ -74,7 +73,7 @@ $(function(){
 								
 							<a	href="${pageContext.request.contextPath }/gallery/delete/2"
 								class="del-button"
-								title="삭제">삭제</a>
+								title="삭제"><span class="blind">삭제</span></a>
 						</li>
 						
 						<li>
