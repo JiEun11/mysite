@@ -61,9 +61,10 @@ $(function(){
 								data-lightbox="gallery"
 								class="image"
 								style="background-image:url('${pageContext.request.contextPath }${vo.url }')"></a>
-								
-							<a	href="${pageContext.request.contextPath }/gallery/delete/${vo.no }"
-								class="del-button" title="삭제"><span class="blind">삭제</span></a>
+							<c:if test="${authUser.role eq 'ADMIN'}">
+								<a	href="${pageContext.request.contextPath }/gallery/delete/${vo.no }"
+									class="del-button" title="삭제"><span class="blind">삭제</span></a>
+							</c:if>		
 						</li>
 					</c:forEach>	
 																																									

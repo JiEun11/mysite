@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.poscoict.mysite.security.Auth;
 import com.poscoict.mysite.service.GalleryService;
 import com.poscoict.mysite.service.UploadService;
 import com.poscoict.mysite.vo.GalleryVo;
@@ -32,7 +33,7 @@ public class GalleryController {
 		return "gallery/index";
 	}
 	
-//	@Auth(role="ADMIN")
+	@Auth(role="ADMIN")
 	@RequestMapping("/delete/{no}")
 	public String delete(@PathVariable("no") Long no) {
 		System.out.println("delete : " + no);
