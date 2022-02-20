@@ -35,8 +35,8 @@ public class GalleryController {
 //	@Auth(role="ADMIN")
 	@RequestMapping("/delete/{no}")
 	public String delete(@PathVariable("no") Long no) {
-		galleryService.removeImg(no);
 		System.out.println("delete : " + no);
+		galleryService.removeImg(no);
 		return "redirect:/gallery";
 	}
 	

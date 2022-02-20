@@ -57,6 +57,7 @@ $(function(){
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<li>
 							<a	href="${pageContext.request.contextPath }${vo.url }"
+								data-title="${vo.comments }"
 								data-lightbox="gallery"
 								class="image"
 								style="background-image:url('${pageContext.request.contextPath }${vo.url }')">&nbsp;</a>

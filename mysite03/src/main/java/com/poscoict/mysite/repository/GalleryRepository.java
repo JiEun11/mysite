@@ -17,4 +17,9 @@ public class GalleryRepository {
 	public List<GalleryVo> findGalleryAll() {
 		return sqlSession.selectList("gallery.findAll");
 	}
+
+	public int deleteImage(Long no) {
+		System.out.println("Repository gallery no : " + no);
+		return sqlSession.delete("gallery.deleteImage",no);
+	}
 }

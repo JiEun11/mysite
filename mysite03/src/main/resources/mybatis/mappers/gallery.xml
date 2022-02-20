@@ -10,7 +10,7 @@
 
 	<delete id="deleteImage" parameterType="long">
 		<![CDATA[
-			DELETE FROM board WHERE no = #{no }
+			DELETE FROM gallery WHERE no = #{no }
 		]]>
 	</delete>
 	

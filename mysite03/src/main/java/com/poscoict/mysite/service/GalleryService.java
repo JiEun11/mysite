@@ -18,9 +18,9 @@ public class GalleryService {
 		return galleryRepository.findGalleryAll();
 	}
 
-	public void removeImg(Long no) {
-		// TODO Auto-generated method stub
-		
+	public Boolean removeImg(Long no) {
+		System.out.println("Service gallery no : " + no);
+		return galleryRepository.deleteImage(no)==1;		
 	}
 
 }
