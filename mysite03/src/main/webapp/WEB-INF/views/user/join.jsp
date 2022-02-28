@@ -11,6 +11,24 @@
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath }/assets/css/user.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script>
+$(function(){
+	$("#btn-checkemail").click(function(){
+		$.ajax({
+			url:"${pageContext.request.contextPath }/user/api/checkemail?email=admin@mysite.com",
+			type:"get",
+			dataType:"json",
+			success: function(response){
+				console.log(response);
+			},
+			error: function(xhr, status, e){
+				console.log(status, e);
+			}
+		});	
+	});
+});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -37,7 +55,7 @@
 					
 					<label class="block-label" for="email"><spring:message code="user.join.label.email" /></label>
 					<form:input path="email" />
-					<input type="button" value="id 중복체크">
+					<input type="button" id="btn-checkemail" value="중복체크">
 					<p style="text-align:left; padding-left:0; color:#f00">
 						<form:errors path="email" />
 					</p>	
