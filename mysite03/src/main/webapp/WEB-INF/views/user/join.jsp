@@ -15,30 +15,42 @@
 <script>
 $(function(){
 	$("#join-form").submit(function(){
-		event.preventDefault();
+		event.preventDefault(); //submit 안 되게 방지
 		
 		// 1. 이름 유효성 체크 - validation(이름이 비어있는지 확인)  
 		if($("#name").val() === ''){
-			alert("이름이 비어있습니다.");
+			alert("Name is empty");
 			$("#name").focus();
 			return;
 		}
 		
 		
 		// 2. 이메일 유효성 체크 - validation(email empty)
-		
+		if($("#email").val() === ''){
+			alert("Email is empty");
+			$("#email").focus();
+			return;
+		}
 		
 		
 		// 3. 중복체크 되었는지의 유무 *****
-		
+		if($("img", $("#user")).css('display')==='none'){
+			alert("Please check your email is overlapped");
+			$("#email").focus();
+			return;
+		}
 		
 		// 4. 비밀번호 유효성(empty) 체크
-		
+		if($("#password").val() === ''){
+			alert("password is empty");
+			$("#password").focus();
+			return;
+		}
 		
 		// 5. 유효성 ok
 		console.log("ok!!!");
 		//$("#join-form").submit(); $("#join-form")[0].submit();인지 헷갈  
-		
+		$("#join-form")[0].submit();
 		
 		
 	});
