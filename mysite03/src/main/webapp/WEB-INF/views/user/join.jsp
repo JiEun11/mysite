@@ -47,10 +47,22 @@ $(function(){
 			return;
 		}
 		
-		// 5. 유효성 ok
+		// 5. 성별 유효성 체크
+		if(!$("#gender-field input").is(":checked")){
+			alert("Please check your gender field");
+			return;
+		}
+		
+		// 6. 약관동의 체크 여부
+		if(!$("#agree-prov").is(":checked")){
+			alert("Please agree to the provision for use");
+			$("#agree-prov").focus();
+			return;
+		}
+		// 7. 유효성 ok
 		console.log("ok!!!");
 		//$("#join-form").submit(); $("#join-form")[0].submit();인지 헷갈  
-		$("#join-form")[0].submit();
+		//$("#join-form")[0].submit();
 		
 		
 	});
@@ -136,7 +148,7 @@ $(function(){
 						<form:errors path="password" />
 					</p>	
 					
-					<fieldset>
+					<fieldset id="gender-field">
 						<legend>성별</legend>
 						<form:radiobutton path="gender" value="female" label="여"/>
 						<form:radiobutton path="gender" value="male" label="남"/>
