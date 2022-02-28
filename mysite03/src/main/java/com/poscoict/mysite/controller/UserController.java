@@ -43,7 +43,7 @@ public class UserController {
 			return "user/join";	//forwarding 시킴 
 		}
 		
-		userService.join(vo);	//insert 작업 발생 
+		//userService.join(vo);	//insert 작업 발생 
 		return "redirect:/user/joinsuccess";	//redirect, 여기파일에 있는 경로로 리다렉 해줘야함
 	}
 	
