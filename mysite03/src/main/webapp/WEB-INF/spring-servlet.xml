@@ -14,10 +14,33 @@
 
 	<!-- Message Convertor, Handler Mapping, Validator 설정 및 생성 -->
 	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- 1. html(text) message converter -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+
+			<!-- 2. XML message converter -->
+			
+			<!-- 3. JSON message converter -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	
 		<mvc:argument-resolvers>
 			<bean
 				class="com.poscoict.mysite.security.AuthUserHandlerMethodArgumentResolve" />
 		</mvc:argument-resolvers>
+		
 	</mvc:annotation-driven>
 
 	<!-- Servlet Container(tomcat)의 DefaultServlet 위임(delegate) Hadler -->
