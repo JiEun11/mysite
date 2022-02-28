@@ -59,6 +59,7 @@ $(function(){
 			$("#agree-prov").focus();
 			return;
 		}
+		
 		// 7. 유효성 ok
 		console.log("ok!!!");
 		//$("#join-form").submit(); $("#join-form")[0].submit();인지 헷갈  
