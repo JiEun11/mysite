@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>mysite</title>
+<title>mysite03</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/assets/css/guestbook-spa.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -16,7 +16,7 @@ var render = function(vo){
 		var html = 
 			"<li data-no='" + vo.no + "'>" +
 			"<strong>" + vo.name + "</strong>" +
-			"<p>" + vo.message + "</p>" +
+			"<p>" + vo.message.replace(/\n/g,"<br>") + "</p>" +
 			"<strong></strong>" +
 			"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
 			"</li>";
@@ -32,24 +32,117 @@ var fetch = function(){
 		dataType: 'json',
 		success: function(response){
 			if(response.result !== 'success'){
-				console.log(response);	
+				console.error(response.message);	
 				return;
 			}
 			
 			for(var i = 0; i< response.data.length; i++){
 				var vo = response.data[i];
-				console.log(i, vo);
+				//console.log(i, vo);
 				var html = render(vo);
 				$("#list-guestbook").append(html);
 				startNo = response.data[i].no;
-				console.log("startNo : " + startNo);
+				//console.log("startNo : " + startNo);
 			}
 		}
 	});
 };
 
 $(function(){
+		
+	// add event 
+	$("#add-form").submit(function(event){
+		event.preventDefault();
+		
+		var vo = {};
+		vo.name = $("#input-name").val();
+		vo.password = $("#input-password").val();
+		vo.message = $("#tx-content").val();
+		
+		console.log(vo);
+		
+		$.ajax({
+			url: '${pageContext.request.contextPath }/api/guestbook',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(vo),	//data를 string화 시키기 
+			success: function(response){
+				if(response.result !== 'success'){
+					console.error(response.message);
+					return;
+				}
+				
+				var html = render(response.data);
+				$("#list-guestbook").prepend(html);
+				
+				$("#input-name").val("");
+				$("#input-password").val("");
+				$("#tx-content").val("");
+			}
+			
+			
+		});
+
+	});
 	
+	// 삭제 다이얼로그 객체 생성 
+	var dialogDelete = $("#dialog-delete-form").dialog({
+		autoOpen: false,
+		modal: true,
+		buttons:{
+			"삭제": function(){
+				var no = $("#hidden-no").val();
+				var password = $("#password-delete").val();
+				var url = "${pageContext.request.contextPath }/api/guestbook/" + no;
+				$.ajax({
+					url: url,
+					async: true,
+					type: 'delete',
+					dataType: 'json',
+					data: "password="+ password,
+					success: function(response){
+						if(response.result !== 'success'){
+							console.error(response.message);
+							return;
+						}
+						
+						if(response.data == -1){
+							$(".validateTips.error").show();
+							$("#password-delete").val("").focus();
+							return;
+						}
+						
+						// 삭제 된 경우
+						$("#list-guestbook li[data-no='"+ response.data + "']").remove();
+						dialogDelete.dialog('close');
+					}
+				});
+			},
+			"취소": function(){
+				$(this).dialog('close');
+			}
+		},
+		close:function(){
+
+			$(".validateTips.error").hide();
+			$("#password-delete").val("");
+			$("#hidden-no").val("");
+		}
+		
+	});
+	
+	// 글 삭제 버튼 Click event 처리 (Live Event)
+	$(document).on('click',"#list-guestbook li a", function(event){
+		event.preventDefault();
+		
+		var no = $(this).data("no");
+		$("#hidden-no").val(no);
+		console.log("clicked");
+		dialogDelete.dialog('open');
+	});
+	
+	// 최초 리스트 가져오기
 	fetch();
 	
 });
