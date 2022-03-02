@@ -3,4 +3,5 @@
 **/.settings
 **/target
 **/build
-**/bin/
+**/bin
+**/.DS_Store
