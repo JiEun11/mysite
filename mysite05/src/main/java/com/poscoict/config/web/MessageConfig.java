@@ -11,7 +11,7 @@ public class MessageConfig {
 	@Bean
 	public MessageSource messageSource() {	
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("com/poscoict/mysite/config/web/messaages/messages_ko");
+		messageSource.setBasename("com/poscoict/mysite/config/web/messages/messages_ko");
 		messageSource.setDefaultEncoding("utf-8");
 		
 		return messageSource;

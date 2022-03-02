@@ -51,5 +51,8 @@ public class UserRepository {
 		return count == 1;
 	}	
 		
+	public UserVo findByEmail(String email) {
 		
+		return sqlSession.selectOne("user.findByEmail", email);
+	}
 }
