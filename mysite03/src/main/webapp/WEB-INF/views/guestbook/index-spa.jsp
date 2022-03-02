@@ -132,6 +132,17 @@ $(function(){
 		
 	});
 	
+	// 스크롤 이벤트 
+	$(window).scroll(function(){
+		var $window = $(this);
+		var windowHeight = $window.height();
+		var scrollTop = $window.scrollTop();
+		var documentHeight = $(document).height();
+		if(scrollTop + windowHeight + 10 > documentHeight){
+			console.log("scrollTop + windowHeight + 10 > documentHeight");
+		}
+	});
+	
 	// 글 삭제 버튼 Click event 처리 (Live Event)
 	$(document).on('click',"#list-guestbook li a", function(event){
 		event.preventDefault();
@@ -144,6 +155,7 @@ $(function(){
 	
 	// 최초 리스트 가져오기
 	fetch();
+	
 	
 });
 </script>
@@ -160,9 +172,17 @@ $(function(){
 					<textarea id="tx-content" placeholder="내용을 입력해 주세요."></textarea>
 					<input type="submit" value="보내기" />
 				</form>
-				<ul id="list-guestbook">
-								
-				</ul>
+				
+				<div>
+					<button id="btn-next" title="다음 가져오기">next</button>
+				</div>
+				
+				<ul id="list-guestbook"></ul>
+				
+				<div>
+					<button id="btn-next" title="다음 가져오기">next</button>
+				</div>
+				
 			</div>
 			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">
   				<p class="validateTips normal">작성시 입력했던 비밀번호를 입력하세요.</p>
