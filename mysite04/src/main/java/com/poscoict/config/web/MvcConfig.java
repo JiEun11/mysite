@@ -58,7 +58,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
 				.indentOutput(true).dateFormat(new SimpleDateFormat("yyy-mm-dd"));
 		
-		MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+		MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter(builder.build());
 		messageConverter.setSupportedMediaTypes(
 				Arrays.asList(
 					new MediaType("application","json",Charset.forName("utf-8"))
