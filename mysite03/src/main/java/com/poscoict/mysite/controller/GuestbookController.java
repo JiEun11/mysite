@@ -19,6 +19,11 @@ public class GuestbookController {
 	@Autowired
 	private GuestbookService guestbookService;
 	
+	@RequestMapping(value="/spa")
+	public String spa() {
+		return "guestbook/index-spa";
+	}
+	
 	// 홈페이지에서 방명록 눌렀을 때의 접근 
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public String guestbook(Model model) {
