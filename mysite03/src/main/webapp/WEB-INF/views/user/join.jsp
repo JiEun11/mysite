@@ -8,54 +8,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>mysite</title>
+<title>mysite03</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath }/assets/css/user.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script>
+var messageBox = function(title,message, callback){
+	$("#dialog-message p").text(message);
+	
+	$("#dialog-message")
+			.attr('title',title)
+			.dialog({
+	      resizable: false,
+	      height: "auto",
+	      width: 300,
+	      modal: true,
+	      buttons: {
+	        "Confirm": function() {
+	          $( this ).dialog( "close" );
+	        }
+	      },
+	      close: callback
+	});
+	
+}
+
 $(function(){
 	$("#join-form").submit(function(){
 		event.preventDefault(); //submit 안 되게 방지
 		
 		// 1. 이름 유효성 체크 - validation(이름이 비어있는지 확인)  
 		if($("#name").val() === ''){
-			alert("Name is empty");
-			$("#name").focus();
+			//alert("Name is empty");
+			messageBox('Join','Name is required', function(){
+				$("#name").focus();
+			});
+			
 			return;
 		}
 		
 		
 		// 2. 이메일 유효성 체크 - validation(email empty)
 		if($("#email").val() === ''){
-			alert("Email is empty");
-			$("#email").focus();
+			//alert("Email is empty");
+			messageBox('Email','Your Email is empty, Email is required',function(){
+				$("#email").focus();	
+			});
+			
 			return;
 		}
 		
 		
 		// 3. 중복체크 되었는지의 유무 *****
 		if($("img", $("#user")).css('display')==='none'){
-			alert("Please check your email is overlapped");
-			$("#email").focus();
+			//alert("Please check your email is overlapped");
+			messageBox('Email','Please check your email is overlapped',function(){
+				$("#email").focus();	
+			});
+			
 			return;
 		}
 		
 		// 4. 비밀번호 유효성(empty) 체크
 		if($("#password").val() === ''){
-			alert("password is empty");
-			$("#password").focus();
+			//alert("password is empty");
+			messageBox('Password','Password is empty',function(){
+				$("#password").focus();	
+			});
+			
 			return;
 		}
 		
 		// 5. 성별 유효성 체크
 		if(!$("#gender-field input").is(":checked")){
-			alert("Please check your gender field");
+			//alert("Please check your gender field");
+			messageBox('Gender','Please check your gender field');
 			return;
 		}
 		
 		// 6. 약관동의 체크 여부
 		if(!$("#agree-prov").is(":checked")){
-			alert("Please agree to the provision for use");
+			//alert("Please agree to the provision for use");
+			messageBox('agree provision','Please agree to the provision for use');
 			$("#agree-prov").focus();
 			return;
 		}
@@ -94,10 +130,13 @@ $(function(){
 				
 				
 				if(response.data){
-					alert("존재하는 이메일입니다. 다른 이메일을 사용해주세요.");
-					$("#email")
+					//alert("존재하는 이메일입니다. 다른 이메일을 사용해주세요.");
+					messageBox("이메일 중복 확인","존재하는 이메일입니다. 다른 이메일을 사용해주세요.",function(){
+						$("#email")
 						.val('')
 						.focus();
+					})
+					
 					return;
 				}
 				
@@ -151,8 +190,8 @@ $(function(){
 					
 					<fieldset id="gender-field">
 						<legend>성별</legend>
-						<form:radiobutton path="gender" value="female" label="여"/>
-						<form:radiobutton path="gender" value="male" label="남"/>
+						<form:radiobutton path="gender" value="female" label="여" />
+						<form:radiobutton path="gender" value="male" label="남" />
 					</fieldset>
 
 					<fieldset>
@@ -166,6 +205,11 @@ $(function(){
 				</form:form>
 			</div>
 		</div>
+		
+		<div id="dialog-message" title="Join" style="display:none; line-height: 50px;">
+		  <p></p>
+		</div>
+		
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
