@@ -11,6 +11,49 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+var render = function(vo){
+		var html = 
+			"<li data-no='" + vo.no + "'>" +
+			"<strong>" + vo.name + "</strong>" +
+			"<p>" + vo.message + "</p>" +
+			"<strong></strong>" +
+			"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
+			"</li>";
+			
+			return html;
+};
+var fetch = function(){
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath }/api/guestbook",
+		asnyc: true,
+		type: 'get',
+		dataType: 'json',
+		success: function(response){
+			if(response.result !== 'success'){
+				console.log(response);	
+				return;
+			}
+			
+			for(var i = 0; i< response.data.length; i++){
+				var vo = response.data[i];
+				console.log(i, vo);
+				var html = render(vo);
+				$("#list-guestbook").append(html);
+				startNo = response.data[i].no;
+				console.log("startNo : " + startNo);
+			}
+		}
+	});
+};
+
+$(function(){
+	
+	fetch();
+	
+});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -25,38 +68,7 @@
 					<input type="submit" value="보내기" />
 				</form>
 				<ul id="list-guestbook">
-
-					<li data-no=''>
-						<strong>지나가다가</strong>
-						<p>
-							별루입니다.<br>
-							비번:1234 -,.-
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-					<li data-no=''>
-						<strong>둘리</strong>
-						<p>
-							안녕하세요<br>
-							홈페이지가 개 굿 입니다.
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-
-					<li data-no=''>
-						<strong>주인</strong>
-						<p>
-							아작스 방명록 입니다.<br>
-							테스트~
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-									
+								
 				</ul>
 			</div>
 			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">
