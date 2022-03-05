@@ -20,6 +20,10 @@ public class GuestbookRepository {
 		return sqlSession.selectList("guestbook.findAll");
 	}
 	
+	public List<GuestbookVo> findAll(Long no) {
+		return sqlSession.selectList("guestbook.findAllByNo", no);
+	}
+	
 	public boolean insert(GuestbookVo vo) {
 		int count = sqlSession.insert("guestbook.insert", vo);
 		// vo를 넣었는데 insert 일어나고 나서 pk를 알고싶을 때 
@@ -35,5 +39,6 @@ public class GuestbookRepository {
 		
 		return 1 == sqlSession.delete("guestbook.delete",map);
 	}
+
 	
 }

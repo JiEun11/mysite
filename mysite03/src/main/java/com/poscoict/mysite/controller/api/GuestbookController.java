@@ -24,7 +24,7 @@ public class GuestbookController {
 	private GuestbookService guestbookService;
 	
 	// 1. add : POST
-	@PostMapping("")
+	@PostMapping("/add")
 	public Object create(@RequestBody GuestbookVo vo) {
 		System.out.println("guestbook insert : " + vo );
 		guestbookService.addMessage(vo);
@@ -32,17 +32,17 @@ public class GuestbookController {
 	}
 	
 	// 2. list : GET
-	@GetMapping("")
-	public Object read(@RequestParam(value="no", required=true, defaultValue="-1") Long no) {
-		
-		List<GuestbookVo> list = guestbookService.getMessageList();
+	@GetMapping("/list/{no}")
+	public Object read(@PathVariable("no") Long startNo) {
+		System.out.println(startNo);
+		List<GuestbookVo> list = guestbookService.getMessageList(startNo);
 		System.out.println(list);
 		return JsonResult.success(list);
 	}
 	
 	
 	// 3. delete : DELETE
-	@DeleteMapping("/{no}")
+	@DeleteMapping("/delete/{no}")
 	public Object delete(
 			@PathVariable("no") Long no,
 			@RequestParam(value="password", required=true, defaultValue="") String password) {

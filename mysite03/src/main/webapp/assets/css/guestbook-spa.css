@@ -73,7 +73,7 @@
 	line-height:1.75em;
 	border-radius:4px;	
 }
-#guestbook #btn-next {
+#guestbook .btn-next {
 	margin: 20px 0 0 0;
 	display: block;
 	outline: none;	
@@ -86,7 +86,7 @@
 	cursor:pointer;
 }
 
-#guestbook #btn-next:hover {
+#guestbook .btn-next:hover {
 	background-color:#65B791;
 	color:#fff;
 }

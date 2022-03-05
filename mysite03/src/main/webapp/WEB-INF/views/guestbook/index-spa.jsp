@@ -12,6 +12,9 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+var startNo = 0;		// offset 시작값 
+var isLast = false;	// offset 했을 때 더 이상 불러올 글 없는지 체크 
+
 var render = function(vo){
 		var html = 
 			"<li data-no='" + vo.no + "'>" +
@@ -23,33 +26,55 @@ var render = function(vo){
 			
 			return html;
 };
-var fetch = function(){
+
+var fetchList = function(){
+	if(isLast){
+		return;
+	}
 	
 	$.ajax({
-		url: "${pageContext.request.contextPath }/api/guestbook",
-		asnyc: true,
+		url: "${pageContext.request.contextPath }/api/guestbook/list/" +startNo,
+		async: true,
 		type: 'get',
 		dataType: 'json',
+		data: '',
 		success: function(response){
 			if(response.result !== 'success'){
 				console.error(response.message);	
 				return;
 			}
 			
+			// 더 이상 가져올 데이터 없는 경우
+			if(response.data.length == 0){
+				isLast = true;
+				$(".btn-next").prop("disabled",true);
+				return;
+			}
+			
 			for(var i = 0; i< response.data.length; i++){
 				var vo = response.data[i];
-				//console.log(i, vo);
+				console.log(i, vo);
 				var html = render(vo);
 				$("#list-guestbook").append(html);
-				startNo = response.data[i].no;
-				//console.log("startNo : " + startNo);
+				startNo = $('#list-guestbook li').last().data('no') || 0;
+				console.log("startNo : " + startNo);
 			}
+			
+		},
+		error: function(xhr, status, e){
+			console.error(status +" : "+e);
 		}
+		
 	});
-};
+	
+}
 
 $(function(){
-		
+	
+	// fetch event next data when click the button
+	$('.btn-next').click(fetchList);
+	
+	
 	// add event 
 	$("#add-form").submit(function(event){
 		event.preventDefault();
@@ -62,7 +87,7 @@ $(function(){
 		console.log(vo);
 		
 		$.ajax({
-			url: '${pageContext.request.contextPath }/api/guestbook',
+			url: '${pageContext.request.contextPath }/api/guestbook/add',
 			type: 'post',
 			dataType: 'json',
 			contentType: 'application/json',
@@ -79,11 +104,11 @@ $(function(){
 				$("#input-name").val("");
 				$("#input-password").val("");
 				$("#tx-content").val("");
-			}
-			
-			
+			},
+			error: function(xhr, status, e){
+				console.log(status+ " : " + e);
+			}			
 		});
-
 	});
 	
 	// 삭제 다이얼로그 객체 생성 
@@ -94,7 +119,7 @@ $(function(){
 			"삭제": function(){
 				var no = $("#hidden-no").val();
 				var password = $("#password-delete").val();
-				var url = "${pageContext.request.contextPath }/api/guestbook/" + no;
+				var url = "${pageContext.request.contextPath }/api/guestbook/delete/" + no;
 				$.ajax({
 					url: url,
 					async: true,
@@ -107,15 +132,20 @@ $(function(){
 							return;
 						}
 						
-						if(response.data == -1){
-							$(".validateTips.error").show();
-							$("#password-delete").val("").focus();
+						if(response.data != -1){
+							// 삭제 된 경우
+							$("#list-guestbook li[data-no='"+ response.data + "']").remove();
+							dialogDelete.dialog('close');
 							return;
 						}
 						
-						// 삭제 된 경우
-						$("#list-guestbook li[data-no='"+ response.data + "']").remove();
-						dialogDelete.dialog('close');
+						// 비밀번호 틀린 경우 
+						$(".validateTips.error").show();
+						$("#password-delete").val("").focus();
+						
+					},
+					error: function(xhr, status, e){
+						console.error(status +" : "+e);
 					}
 				});
 			},
@@ -140,6 +170,7 @@ $(function(){
 		var documentHeight = $(document).height();
 		if(scrollTop + windowHeight + 10 > documentHeight){
 			console.log("scrollTop + windowHeight + 10 > documentHeight");
+			fetchList();
 		}
 	});
 	
@@ -154,7 +185,7 @@ $(function(){
 	});
 	
 	// 최초 리스트 가져오기
-	fetch();
+	fetchList();
 	
 	
 });
@@ -174,13 +205,13 @@ $(function(){
 				</form>
 				
 				<div>
-					<button id="btn-next" title="다음 가져오기">next</button>
+					<button class="btn-next" title="다음 가져오기">next</button>
 				</div>
 				
 				<ul id="list-guestbook"></ul>
 				
 				<div>
-					<button id="btn-next" title="다음 가져오기">next</button>
+					<button class="btn-next" title="다음 가져오기">next</button>
 				</div>
 				
 			</div>
