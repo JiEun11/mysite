@@ -56,9 +56,10 @@ var fetchList = function(){
 				console.log(i, vo);
 				var html = render(vo);
 				$("#list-guestbook").append(html);
-				startNo = $('#list-guestbook li').last().data('no') || 0;
-				console.log("startNo : " + startNo);
+			
 			}
+			startNo = $('#list-guestbook li').last().data('no') || 0;
+			console.log("startNo : " + startNo);
 			
 		},
 		error: function(xhr, status, e){
